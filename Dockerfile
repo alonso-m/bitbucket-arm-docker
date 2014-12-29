@@ -1,7 +1,7 @@
 FROM java:openjdk-7-jre
 MAINTANER Atlassian Stash Team
 
-ENV STASH_VERSION  3.5.0
+ENV STASH_VERSION 3.5.1
 
 # https://confluence.atlassian.com/display/STASH/Stash+home+directory
 ENV STASH_HOME          /var/atlassian/application-data/stash
