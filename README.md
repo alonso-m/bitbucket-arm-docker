@@ -18,10 +18,10 @@ Start Atlassian Stash:
             ssaasen/stash
 
 
-3. Success. Stash is now available on [http://localhost:7990](http://localhost:7990)*
+**Success**. Stash is now available on [http://localhost:7990](http://localhost:7990)*
 
 
-* Note: If you are using `boot2docker` on Mac OS X, please use `open http://$(boot2docker ip):7990` instead.
+_* Note: If you are using `boot2docker` on Mac OS X, please use `open http://$(boot2docker ip):7990` instead._
 
 # Upgrade
 
