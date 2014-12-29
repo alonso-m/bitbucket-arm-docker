@@ -31,6 +31,7 @@ RUN apt-get update -qq                                                          
     && rm -rf                  /var/lib/{apt,dpkg,cache,log}/
 
 RUN mkdir -p                   $STASH_HOME                                        \
+    && mkdir                   ${STASH_HOME}/lib                                  \
     && chmod -R 700            $STASH_HOME                                        \
     && chown -R ${RUN_USER}:${RUN_GROUP} $STASH_HOME                              \
     && mkdir -p                $STASH_INSTALL_DIR                                 
