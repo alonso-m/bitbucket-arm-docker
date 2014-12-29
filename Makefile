@@ -1,7 +1,7 @@
 
 
 build:
-	docker build -t="ssaasen/stash" .
+	docker build -t="${USER}/stash" .
 
 run: data
 	docker run --volumes-from stash-data --name="stash" -d -p 7990:7990 -p 7999:7999 ssaasen/stash
