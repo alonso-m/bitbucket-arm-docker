@@ -5,17 +5,12 @@ directory. This will allow you to upgrade the Stash instance independently:
 
 Start the Data Volume Container:
 
-    $> docker run -d -v /var/atlassian/application-data/stash --name stash-data ssaasen/stash-data
+    $> docker run -d -v /var/atlassian/application-data/stash --name="stash-data" ssaasen/stash-data
 
 Start Atlassian Stash:
 
 
-    $> docker run --volumes-from stash-data \
-            --name="stash" \
-            -d \
-            -p 7990:7990 \
-            -p 7999:7999 \
-            ssaasen/stash
+    $> docker run --volumes-from stash-data --name="stash" -d -p 7990:7990 -p 7999:7999 ssaasen/stash
 
 
 **Success**. Stash is now available on [http://localhost:7990](http://localhost:7990)*
