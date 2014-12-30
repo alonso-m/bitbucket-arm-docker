@@ -30,11 +30,7 @@ RUN apt-get update -qq                                                          
     && apt-get autoremove --yes                                                   \
     && rm -rf                  /var/lib/{apt,dpkg,cache,log}/
 
-RUN mkdir -p                   $STASH_HOME                                        \
-    && mkdir                   ${STASH_HOME}/lib                                  \
-    && chmod -R 700            $STASH_HOME                                        \
-    && chown -R ${RUN_USER}:${RUN_GROUP} $STASH_HOME                              \
-    && mkdir -p                $STASH_INSTALL_DIR                                 
+RUN mkdir -p                             $STASH_INSTALL_DIR
 
 
 RUN curl -L --silent                     ${DOWNLOAD_URL}${STASH_VERSION}.tar.gz | tar -xz --strip=1 -C "$STASH_INSTALL_DIR" \
@@ -50,7 +46,7 @@ RUN curl -L --silent                     ${DOWNLOAD_URL}${STASH_VERSION}.tar.gz 
 
 USER ${RUN_USER}:${RUN_GROUP}
 
-VOLUME ["${STASH_HOME}", "${STASH_INSTALL_DIR}"]
+VOLUME ["${STASH_INSTALL_DIR}"]
 
 # HTTP Port
 EXPOSE 7990
