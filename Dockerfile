@@ -15,10 +15,10 @@ ENV STASH_INSTALL_DIR   /opt/atlassian/stash
 
 
 # Use the default unprivileged account. This could be considered bad practice
-# on systems where multiple processes end up being executed by 'nobody' but
+# on systems where multiple processes end up being executed by 'daemon' but
 # here we only ever run one process anyway.
-ENV RUN_USER            nobody
-ENV RUN_GROUP           nogroup
+ENV RUN_USER            daemon
+ENV RUN_GROUP           daemon
 
 
 # Install git, download and extract Stash and create the required directory layout.
