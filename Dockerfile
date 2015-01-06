@@ -4,7 +4,7 @@ MAINTAINER Atlassian Stash Team
 
 ENV STASH_VERSION 3.5.1
 
-ENV DOWNLOAD_URL        http://www.atlassian.com/software/stash/downloads/binary/atlassian-stash-
+ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/stash/downloads/atlassian-stash-
 
 # https://confluence.atlassian.com/display/STASH/Stash+home+directory
 ENV STASH_HOME          /var/atlassian/application-data/stash
