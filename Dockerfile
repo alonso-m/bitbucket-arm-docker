@@ -2,7 +2,7 @@ FROM java:openjdk-7-jre
 MAINTAINER Atlassian Stash Team
 
 
-ENV STASH_VERSION 3.5.1
+ENV STASH_VERSION 3.6.0
 
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/stash/downloads/atlassian-stash-
 
