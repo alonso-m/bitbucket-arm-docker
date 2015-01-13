@@ -8,6 +8,7 @@ if [ "x$1" == "x" ]; then
     echo "E.g."
     echo ""
     echo "$0 3.5.1"
+    exit -1
 fi
 
 
