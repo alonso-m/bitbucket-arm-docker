@@ -20,7 +20,7 @@ _* Note: If you are using `boot2docker` on Mac OS X, please use `open http://$(b
 
 ## Host Directory Approach
 
-Instead of using a separate data volume container you can instead mount a host directory as a [data volume](https://docs.docker.com/userguide/dockervolumes/#mount-a-host-directory-as-a-data-volume):
+Instead of using a separate data volume container you can mount a host directory as a [data volume](https://docs.docker.com/userguide/dockervolumes/#mount-a-host-directory-as-a-data-volume):
 
 Set permissions for data directory:
 
