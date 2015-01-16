@@ -1,3 +1,8 @@
+# Overview
+
+This Docker container makes it easy to get an instance of Stash up and running
+for evaluative purposes. Atlassian is not yet able to provide support.
+
 # Quick Start
 
 We recommend using a separate data volume container for the `STASH_HOME`
