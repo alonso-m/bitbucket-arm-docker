@@ -1,7 +1,7 @@
 # Overview
 
 This Docker container makes it easy to get an instance of Stash up and running
-for evaluative purposes. Atlassian is not yet able to provide support.
+for evaluative purposes. Atlassian is not yet able to provide support for using Docker in production.
 
 # Quick Start
 
