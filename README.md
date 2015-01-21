@@ -5,35 +5,21 @@ for evaluative purposes. Atlassian is not yet able to provide support for using 
 
 # Quick Start
 
-We recommend using a separate data volume container for the `STASH_HOME`
-directory. This will allow you to upgrade the Stash instance independently:
+For the `STASH_HOME` directory that is used to store the repository data
+(amongst other things) we recommend mounting a host directory as a [data volume](https://docs.docker.com/userguide/dockervolumes/#mount-a-host-directory-as-a-data-volume):
 
-Start the Data Volume Container:
-
-    $> docker run -d -v /var/atlassian/application-data/stash --name="stash-data" atlassian/stash-data
-
-Start Atlassian Stash:
-
-
-    $> docker run --volumes-from stash-data --name="stash" -d -p 7990:7990 -p 7999:7999 atlassian/stash
-
-
-**Success**. Stash is now available on [http://localhost:7990](http://localhost:7990)*
-
-
-_* Note: If you are using `boot2docker` on Mac OS X, please use `open http://$(boot2docker ip):7990` instead._
-
-## Host Directory Approach
-
-Instead of using a separate data volume container you can mount a host directory as a [data volume](https://docs.docker.com/userguide/dockervolumes/#mount-a-host-directory-as-a-data-volume):
-
-Set permissions for data directory:
+Set permissions for the data directory so that the runuser can write to it:
 
     $> docker run -u root -v /data/stash:/var/atlassian/application-data/stash atlassian/stash chown -R daemon  /var/atlassian/application-data/stash
 
 Start Atlassian Stash:
 
     $> docker run -v /data/stash:/var/atlassian/application-data/stash --name="stash" -d -p 7990:7990 -p 7999:7999 atlassian/stash
+    
+**Success**. Stash is now available on [http://localhost:7990](http://localhost:7990)*
+
+
+_* Note: If you are using `boot2docker` on Mac OS X, please use `open http://$(boot2docker ip):7990` instead._
 
 # Upgrade
 
@@ -44,11 +30,19 @@ container and start a new one based on a more recent image:
     $> docker rm stash
     $> docker run ... (See above)
 
-As your data is stored in the `stash-data` data volume container it will still
+As your data is stored in the data volume directory on the host it will still
 be available after the upgrade.
 
-_Note: Please make sure that you don't accidentally remove the `stash-data`
-container._
+_Note: Please make sure that you **don't** accidentally remove the `stash`
+container and its volumes using the `-v` option._
+
+# Backup
+
+For evalutations you can use the built-in database that will store its files in the Stash home directory. In that case it is sufficient to create a backup archive of the directory on the host that is used as a volume (`/data/stash` in the example above).
+
+The [Stash Backup Client](https://confluence.atlassian.com/display/STASH/Data+recovery+and+backups) is currently not supported in the Docker setup. You can however use the [Stash DIY Backup](https://confluence.atlassian.com/display/STASH/Using+Stash+DIY+Backup) approach in case you decided to use an external database.
+
+Read more about data recovery and backups: []https://confluence.atlassian.com/display/STASH/Data+recovery+and+backups](https://confluence.atlassian.com/display/STASH/Data+recovery+and+backups)
 
 # Versioning
 
