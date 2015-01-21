@@ -49,5 +49,6 @@ Read more about data recovery and backups: []https://confluence.atlassian.com/di
 The `latest` tag matches the most recent release of Atlassian Stash.
 Thus `atlassian/stash:latest` will use the newest version of Stash available.
 
-Alternatively you can use a specific version of Stash by using a version number
-tag: `atlassian/stash:3.4.0`
+Alternatively you can use a specific minor version of Stash by using a version number
+tag: `atlassian/stash:3.5`. This will install the latest `3.5.x` version that
+is available.
