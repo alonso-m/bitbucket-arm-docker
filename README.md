@@ -52,3 +52,10 @@ Thus `atlassian/stash:latest` will use the newest version of Stash available.
 Alternatively you can use a specific minor version of Stash by using a version number
 tag: `atlassian/stash:3.5`. This will install the latest `3.5.x` version that
 is available.
+
+
+# Issue tracker
+
+Please raise an
+[issue](https://bitbucket.org/atlassian/docker-atlassian-stash/issues) if you
+encounter any problems with this Dockerfile.
