@@ -42,7 +42,7 @@ For evalutations you can use the built-in database that will store its files in 
 
 The [Stash Backup Client](https://confluence.atlassian.com/display/STASH/Data+recovery+and+backups) is currently not supported in the Docker setup. You can however use the [Stash DIY Backup](https://confluence.atlassian.com/display/STASH/Using+Stash+DIY+Backup) approach in case you decided to use an external database.
 
-Read more about data recovery and backups: []https://confluence.atlassian.com/display/STASH/Data+recovery+and+backups](https://confluence.atlassian.com/display/STASH/Data+recovery+and+backups)
+Read more about data recovery and backups: [https://confluence.atlassian.com/display/STASH/Data+recovery+and+backups](https://confluence.atlassian.com/display/STASH/Data+recovery+and+backups)
 
 # Versioning
 
