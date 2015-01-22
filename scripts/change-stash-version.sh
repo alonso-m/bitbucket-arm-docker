@@ -1,4 +1,4 @@
-#!/bin/bash -e 
+#!/bin/bash -e
 
 if [ "x$1" == "x" ]; then
     echo "Usage:"
@@ -11,10 +11,6 @@ if [ "x$1" == "x" ]; then
     exit -1
 fi
 
-
 VERSION=$1
 
 sed -i '' -e "s/ENV STASH_VERSION.*/ENV STASH_VERSION ${VERSION}/g" Dockerfile
-
-git add Dockerfile
-git commit -m "Rev Atlassian Stash version to $VERSION"
