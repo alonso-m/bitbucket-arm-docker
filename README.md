@@ -1,6 +1,6 @@
 ![Atlassian Stash](https://www.atlassian.com/wac/software/stash/productLogo/imageBinary/stash_logo_productspage.png)
 
-Stash is an on-premises source code management for Git that's secure, fast, and enterprise grade. Create and manage repositories, set up fine-grained permissions, and collaborate on code – all with the flexibility of your servers.
+Stash is an on-premises source code management solution for Git that's secure, fast, and enterprise grade. Create and manage repositories, set up fine-grained permissions, and collaborate on code – all with the flexibility of your servers.
 
 Learn more about Stash: <https://www.atlassian.com/software/stash>
 
