@@ -28,6 +28,7 @@ Please ensure your container has the necessary resources allocated to it.
 We recommend 2GiB of memory allocated to accommodate both the application server
 and the git processes.
 See [Supported Platforms](https://confluence.atlassian.com/display/STASH/Supported+platforms) for further information.
+    
 
 _* Note: If you are using `boot2docker` on Mac OS X, please use `open http://$(boot2docker ip):7990` instead._
 
