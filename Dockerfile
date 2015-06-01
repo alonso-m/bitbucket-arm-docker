@@ -1,18 +1,18 @@
 FROM java:openjdk-7-jre
 MAINTAINER Atlassian Stash Team
 
-
-ENV STASH_VERSION 3.9.2
-
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/stash/downloads/atlassian-stash-
 
 # https://confluence.atlassian.com/display/STASH/Stash+home+directory
 ENV STASH_HOME          /var/atlassian/application-data/stash
 
-# Install Atlassian Stash to the following location
-ENV STASH_INSTALL_DIR   /opt/atlassian/stash
-
-
+# Install git, download and extract Stash and create the required directory layout.
+# Try to limit the number of RUN instructions to minimise the number of layers that will need to be created.
+RUN apt-get update -qq \
+    && apt-get install -y --no-install-recommends git \
+    && apt-get clean autoclean \
+    && apt-get autoremove --yes \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 # Use the default unprivileged account. This could be considered bad practice
 # on systems where multiple processes end up being executed by 'daemon' but
@@ -20,20 +20,13 @@ ENV STASH_INSTALL_DIR   /opt/atlassian/stash
 ENV RUN_USER            daemon
 ENV RUN_GROUP           daemon
 
+# Install Atlassian Stash to the following location
+ENV STASH_INSTALL_DIR   /opt/atlassian/stash
 
-# Install git, download and extract Stash and create the required directory layout.
-# Try to limit the number of RUN instructions to minimise the number of layers that will need to be created.
-RUN apt-get update -qq                                                            \
-    && apt-get install -y --no-install-recommends                                 \
-            git                                                                   \
-    && apt-get clean autoclean                                                    \
-    && apt-get autoremove --yes                                                   \
-    && rm -rf                  /var/lib/{apt,dpkg,cache,log}/
+ENV STASH_VERSION 3.9.2
 
-RUN mkdir -p                             $STASH_INSTALL_DIR
-
-
-RUN curl -L --silent                     ${DOWNLOAD_URL}${STASH_VERSION}.tar.gz | tar -xz --strip=1 -C "$STASH_INSTALL_DIR" \
+RUN mkdir -p                             ${STASH_INSTALL_DIR} \
+    && curl -L --silent                  ${DOWNLOAD_URL}${STASH_VERSION}.tar.gz | tar -xz --strip=1 -C "$STASH_INSTALL_DIR" \
     && mkdir -p                          ${STASH_INSTALL_DIR}/conf/Catalina      \
     && chmod -R 700                      ${STASH_INSTALL_DIR}/conf/Catalina      \
     && chmod -R 700                      ${STASH_INSTALL_DIR}/logs               \
