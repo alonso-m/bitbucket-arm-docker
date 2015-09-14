@@ -1,12 +1,12 @@
-FROM java:openjdk-7-jre
-MAINTAINER Atlassian Stash Team
+FROM java:openjdk-8-jre
+MAINTAINER Atlassian Bitbucket Server Team
 
-ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/stash/downloads/atlassian-stash-
+ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/bitbucket/downloads/atlassian-bitbucket-
 
-# https://confluence.atlassian.com/display/STASH/Stash+home+directory
-ENV STASH_HOME          /var/atlassian/application-data/stash
+# https://confluence.atlassian.com/display/BitbucketServer/Bitbucket+Server+home+directory
+ENV BITBUCKET_HOME          /var/atlassian/application-data/bitbucket
 
-# Install git, download and extract Stash and create the required directory layout.
+# Install git, download and extract Bitbucket Server and create the required directory layout.
 # Try to limit the number of RUN instructions to minimise the number of layers that will need to be created.
 RUN apt-get update -qq \
     && apt-get install -y --no-install-recommends git \
@@ -20,26 +20,27 @@ RUN apt-get update -qq \
 ENV RUN_USER            daemon
 ENV RUN_GROUP           daemon
 
-# Install Atlassian Stash to the following location
-ENV STASH_INSTALL_DIR   /opt/atlassian/stash
+# Install Atlassian Bitbucket Server to the following location
+ENV BITBUCKET_INSTALL_DIR   /opt/atlassian/bitbucket
 
-ENV STASH_VERSION 3.11.2
+ENV BITBUCKET_VERSION 4.0.0
 
-RUN mkdir -p                             ${STASH_INSTALL_DIR} \
-    && curl -L --silent                  ${DOWNLOAD_URL}${STASH_VERSION}.tar.gz | tar -xz --strip=1 -C "$STASH_INSTALL_DIR" \
-    && mkdir -p                          ${STASH_INSTALL_DIR}/conf/Catalina      \
-    && chmod -R 700                      ${STASH_INSTALL_DIR}/conf/Catalina      \
-    && chmod -R 700                      ${STASH_INSTALL_DIR}/logs               \
-    && chmod -R 700                      ${STASH_INSTALL_DIR}/temp               \
-    && chmod -R 700                      ${STASH_INSTALL_DIR}/work               \
-    && chown -R ${RUN_USER}:${RUN_GROUP} ${STASH_INSTALL_DIR}/logs               \
-    && chown -R ${RUN_USER}:${RUN_GROUP} ${STASH_INSTALL_DIR}/temp               \
-    && chown -R ${RUN_USER}:${RUN_GROUP} ${STASH_INSTALL_DIR}/work               \
-    && chown -R ${RUN_USER}:${RUN_GROUP} ${STASH_INSTALL_DIR}/conf
+RUN mkdir -p                             ${BITBUCKET_INSTALL_DIR} \
+    && curl -L --silent                  ${DOWNLOAD_URL}${BITBUCKET_VERSION}.tar.gz | tar -xz --strip=1 -C "$BITBUCKET_INSTALL_DIR" \
+    && mkdir -p                          ${BITBUCKET_INSTALL_DIR}/conf/Catalina      \
+    && chmod -R 700                      ${BITBUCKET_INSTALL_DIR}/conf/Catalina      \
+    && chmod -R 700                      ${BITBUCKET_INSTALL_DIR}/logs               \
+    && chmod -R 700                      ${BITBUCKET_INSTALL_DIR}/temp               \
+    && chmod -R 700                      ${BITBUCKET_INSTALL_DIR}/work               \
+    && chown -R ${RUN_USER}:${RUN_GROUP} ${BITBUCKET_INSTALL_DIR}/logs               \
+    && chown -R ${RUN_USER}:${RUN_GROUP} ${BITBUCKET_INSTALL_DIR}/temp               \
+    && chown -R ${RUN_USER}:${RUN_GROUP} ${BITBUCKET_INSTALL_DIR}/work               \
+    && chown -R ${RUN_USER}:${RUN_GROUP} ${BITBUCKET_INSTALL_DIR}/conf               \
+    && ln --symbolic                     "/usr/lib/x86_64-linux-gnu/libtcnative-1.so" "${BITBUCKET_INSTALL_DIR}/lib/native/libtcnative-1.so" 
 
 USER ${RUN_USER}:${RUN_GROUP}
 
-VOLUME ["${STASH_INSTALL_DIR}"]
+VOLUME ["${BITBUCKET_INSTALL_DIR}"]
 
 # HTTP Port
 EXPOSE 7990
@@ -47,7 +48,7 @@ EXPOSE 7990
 # SSH Port
 EXPOSE 7999
 
-WORKDIR $STASH_INSTALL_DIR
+WORKDIR $BITBUCKET_INSTALL_DIR
 
 # Run in foreground
-CMD ["./bin/start-stash.sh", "-fg"]
+CMD ["./bin/start-bitbucket.sh", "-fg"]
