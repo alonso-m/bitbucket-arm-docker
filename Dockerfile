@@ -1,15 +1,10 @@
 FROM java:openjdk-8-jre
 MAINTAINER Atlassian Bitbucket Server Team
 
-ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/bitbucket/downloads/atlassian-bitbucket-
-
-# https://confluence.atlassian.com/display/BitbucketServer/Bitbucket+Server+home+directory
-ENV BITBUCKET_HOME          /var/atlassian/application-data/bitbucket
-
 # Install git, download and extract Bitbucket Server and create the required directory layout.
 # Try to limit the number of RUN instructions to minimise the number of layers that will need to be created.
 RUN apt-get update -qq \
-    && apt-get install -y --no-install-recommends git \
+    && apt-get install -y --no-install-recommends git libtcnative-1 \
     && apt-get clean autoclean \
     && apt-get autoremove --yes \
     && rm -rf /var/lib/{apt,dpkg,cache,log}/
@@ -20,22 +15,23 @@ RUN apt-get update -qq \
 ENV RUN_USER            daemon
 ENV RUN_GROUP           daemon
 
+# https://confluence.atlassian.com/display/BitbucketServer/Bitbucket+Server+home+directory
+ENV BITBUCKET_HOME          /var/atlassian/application-data/bitbucket
+
 # Install Atlassian Bitbucket Server to the following location
 ENV BITBUCKET_INSTALL_DIR   /opt/atlassian/bitbucket
 
-ENV BITBUCKET_VERSION 4.0.0
+ENV BITBUCKET_VERSION   4.0.0-rc6
+ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-${BITBUCKET_VERSION}.tar.gz
 
 RUN mkdir -p                             ${BITBUCKET_INSTALL_DIR} \
-    && curl -L --silent                  ${DOWNLOAD_URL}${BITBUCKET_VERSION}.tar.gz | tar -xz --strip=1 -C "$BITBUCKET_INSTALL_DIR" \
+    && curl -L --silent                  ${DOWNLOAD_URL} | tar -xz --strip=1 -C "$BITBUCKET_INSTALL_DIR" \
     && mkdir -p                          ${BITBUCKET_INSTALL_DIR}/conf/Catalina      \
     && chmod -R 700                      ${BITBUCKET_INSTALL_DIR}/conf/Catalina      \
     && chmod -R 700                      ${BITBUCKET_INSTALL_DIR}/logs               \
     && chmod -R 700                      ${BITBUCKET_INSTALL_DIR}/temp               \
     && chmod -R 700                      ${BITBUCKET_INSTALL_DIR}/work               \
-    && chown -R ${RUN_USER}:${RUN_GROUP} ${BITBUCKET_INSTALL_DIR}/logs               \
-    && chown -R ${RUN_USER}:${RUN_GROUP} ${BITBUCKET_INSTALL_DIR}/temp               \
-    && chown -R ${RUN_USER}:${RUN_GROUP} ${BITBUCKET_INSTALL_DIR}/work               \
-    && chown -R ${RUN_USER}:${RUN_GROUP} ${BITBUCKET_INSTALL_DIR}/conf               \
+    && chown -R ${RUN_USER}:${RUN_GROUP} ${BITBUCKET_INSTALL_DIR}/                   \
     && ln --symbolic                     "/usr/lib/x86_64-linux-gnu/libtcnative-1.so" "${BITBUCKET_INSTALL_DIR}/lib/native/libtcnative-1.so" 
 
 USER ${RUN_USER}:${RUN_GROUP}
