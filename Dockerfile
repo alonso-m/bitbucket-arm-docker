@@ -21,7 +21,7 @@ ENV BITBUCKET_HOME          /var/atlassian/application-data/bitbucket
 # Install Atlassian Bitbucket Server to the following location
 ENV BITBUCKET_INSTALL_DIR   /opt/atlassian/bitbucket
 
-ENV BITBUCKET_VERSION   4.0.0-rc6
+ENV BITBUCKET_VERSION   4.0.0-rc14
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-${BITBUCKET_VERSION}.tar.gz
 
 RUN mkdir -p                             ${BITBUCKET_INSTALL_DIR} \
@@ -36,7 +36,7 @@ RUN mkdir -p                             ${BITBUCKET_INSTALL_DIR} \
 
 USER ${RUN_USER}:${RUN_GROUP}
 
-VOLUME ["${BITBUCKET_INSTALL_DIR}"]
+VOLUME ["${BITBUCKET_HOME}"]
 
 # HTTP Port
 EXPOSE 7990
