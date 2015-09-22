@@ -16,18 +16,18 @@ For the `BITBUCKET_HOME` directory that is used to store the repository data
 
 Set permissions for the data directory so that the runuser can write to it:
 
-    $> docker run -u root -v /data/bitbucket:/var/atlassian/application-data/bitbucket atlassian/bitbucket chown -R daemon  /var/atlassian/application-data/bitbucket
+    $> docker run -u root -v /data/bitbucket:/var/atlassian/application-data/bitbucket atlassian/bitbucket-server chown -R daemon  /var/atlassian/application-data/bitbucket
 
 Start Atlassian Bitbucket Server:
 
-    $> docker run -v /data/bitbucket:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket
+    $> docker run -v /data/bitbucket:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket-server
 
 **Success**. Bitbucket is now available on [http://localhost:7990](http://localhost:7990)*
 
 Please ensure your container has the necessary resources allocated to it.
 We recommend 2GiB of memory allocated to accommodate both the application server
 and the git processes.
-See [Supported Platforms](https://confluence.atlassian.com/display/BITBUCKET+SERVER/Supported+platforms) for further information.
+See [Supported Platforms](https://confluence.atlassian.com/display/BitbucketServer/Supported+platforms) for further information.
     
 
 _* Note: If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):7990` instead._
@@ -51,9 +51,9 @@ container and its volumes using the `-v` option._
 
 For evalutations you can use the built-in database that will store its files in the Bitbucket Server home directory. In that case it is sufficient to create a backup archive of the directory on the host that is used as a volume (`/data/bitbucket` in the example above).
 
-The [Bitbucket Server Backup Client](https://confluence.atlassian.com/display/BITBUCKET+Server/Data+recovery+and+backups) is currently not supported in the Docker setup. You can however use the [Bitbucket Server DIY Backup](https://confluence.atlassian.com/display/BITBUCKET+SERVER/Using+Bitbucket+DIY+Backup) approach in case you decided to use an external database.
+The [Bitbucket Server Backup Client](https://confluence.atlassian.com/display/BitbucketServer/Data+recovery+and+backups) is currently not supported in the Docker setup. You can however use the [Bitbucket Server DIY Backup](https://confluence.atlassian.com/display/BITBUCKET+SERVER/Using+Bitbucket+DIY+Backup) approach in case you decided to use an external database.
 
-Read more about data recovery and backups: [https://confluence.atlassian.com/display/BITBUCKET+SERVER/Data+recovery+and+backups](https://confluence.atlassian.com/display/BITBUCKET+SERVER/Data+recovery+and+backups)
+Read more about data recovery and backups: [https://confluence.atlassian.com/display/BitbucketServer/Data+recovery+and+backups](https://confluence.atlassian.com/display/BitbucketServer/Data+recovery+and+backups)
 
 # Versioning
 
@@ -61,12 +61,12 @@ The `latest` tag matches the most recent release of Atlassian Bitbucket Server.
 Thus `atlassian/bitbucket:latest` will use the newest version of Bitbucket Server available.
 
 Alternatively you can use a specific minor version of Bitbucket Server by using a version number
-tag: `atlassian/bitbucket:4.0`. This will install the latest `4.0.x` version that
+tag: `atlassian/bitbucket-server:4.0`. This will install the latest `4.0.x` version that
 is available.
 
 
 # Issue tracker
 
 Please raise an
-[issue](https://bitbucket.org/atlassian/docker-atlassian-stash/issues) if you
+[issue](https://bitbucket.org/atlassian/docker-atlassian-bitbucket/issues) if you
 encounter any problems with this Dockerfile.
