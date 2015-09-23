@@ -68,5 +68,5 @@ is available.
 # Issue tracker
 
 Please raise an
-[issue](https://bitbucket.org/atlassian/docker-atlassian-bitbucket/issues) if you
+[issue](https://bitbucket.org/atlassian/docker-atlassian-bitbucket-server/issues) if you
 encounter any problems with this Dockerfile.
