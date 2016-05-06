@@ -1,4 +1,4 @@
-![Atlassian Bitbucket Server](https://www.atlassian.com/wac/software/bitbucket/productLogo/imageBinary/bitbucket_logo_productspage.png)
+![Atlassian Bitbucket Server](https://www.atlassian.com/dam/wac/legacy/bitbucket_logo_landing.png)
 
 Bitbucket Server is an on-premises source code management solution for Git that's secure, fast, and enterprise grade. Create and manage repositories, set up fine-grained permissions, and collaborate on code – all with the flexibility of your servers.
 
