@@ -6,8 +6,7 @@ Learn more about Bitbucket Server: <https://www.atlassian.com/software/bitbucket
 
 # Overview
 
-This Docker container makes it easy to get an instance of Bitbucket up and running
-for evaluative purposes. Atlassian is not yet able to provide support for using Docker in production.
+This Docker container makes it easy to get an instance of Bitbucket up and running.
 
 # Quick Start
 
