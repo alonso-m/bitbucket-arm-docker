@@ -69,3 +69,7 @@ is available.
 Please raise an
 [issue](https://bitbucket.org/atlassian/docker-atlassian-bitbucket-server/issues) if you
 encounter any problems with this Dockerfile.
+
+# Support
+
+For product support, go to [support.atlassian.com](https://support.atlassian.com/)
