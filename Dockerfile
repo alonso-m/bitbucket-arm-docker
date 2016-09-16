@@ -32,7 +32,12 @@ RUN mkdir -p                             ${BITBUCKET_INSTALL_DIR} \
     && chmod -R 700                      ${BITBUCKET_INSTALL_DIR}/temp               \
     && chmod -R 700                      ${BITBUCKET_INSTALL_DIR}/work               \
     && chown -R ${RUN_USER}:${RUN_GROUP} ${BITBUCKET_INSTALL_DIR}/                   \
-    && ln --symbolic                     "/usr/lib/x86_64-linux-gnu/libtcnative-1.so" "${BITBUCKET_INSTALL_DIR}/lib/native/libtcnative-1.so" 
+    && ln --symbolic                     "/usr/lib/x86_64-linux-gnu/libtcnative-1.so" "${BITBUCKET_INSTALL_DIR}/lib/native/libtcnative-1.so" \
+    && sed -i -e 's@^export CATALINA_OPTS$@. $PRGDIR/catalina-connector-opts.sh\nexport CATALINA_OPTS@' ${BITBUCKET_INSTALL_DIR}/bin/setenv.sh \
+    && sed -i -e 's@$PRGDIR/catalina.sh@CATALINA_OPTS="$CATALINA_OPTS" $PRGDIR/catalina.sh@' -e 's@$PRGDIR/startup.sh@CATALINA_OPTS="$CATALINA_OPTS" $PRGDIR/startup.sh@' ${BITBUCKET_INSTALL_DIR}/bin/start-webapp.sh \
+    && sed -i -e 's/port="7990"/port="7990" secure="${catalinaConnectorSecure}" scheme="${catalinaConnectorScheme}" proxyName="${catalinaConnectorProxyName}" proxyPort="${catalinaConnectorProxyPort}"/' ${BITBUCKET_INSTALL_DIR}/conf/server.xml
+
+COPY catalina-connector-opts.sh ${BITBUCKET_INSTALL_DIR}/bin/
 
 USER ${RUN_USER}:${RUN_GROUP}
 
