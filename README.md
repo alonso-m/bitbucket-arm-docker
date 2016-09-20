@@ -38,16 +38,20 @@ then you need to specify extra options to make bitbucket aware of the setup. The
 environment variables.
 
 * `CATALINA_CONNECTOR_PROXYNAME` (default: NONE)
-    The reverse proxy's fully qualified hostname.
+
+   The reverse proxy's fully qualified hostname.
 
 * `CATALINA_CONNECTOR_PROXYPORT` (default: NONE)
-    The reverse proxy's port number via which bitbucket is accessed.
+
+   The reverse proxy's port number via which bitbucket is accessed.
 
 * `CATALINA_CONNECTOR_SCHEME` (default: http)
-    The protocol via which bitbucket is accessed.
+
+   The protocol via which bitbucket is accessed.
 
 * `CATALINA_CONNECTOR_SECURE` (default: false)
-    Set 'true' if CATALINA_CONNECTOR_SCHEME is 'https'.
+
+   Set 'true' if CATALINA_CONNECTOR_SCHEME is 'https'.
 
 # Upgrade
 
