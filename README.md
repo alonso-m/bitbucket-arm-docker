@@ -31,6 +31,28 @@ See [Supported Platforms](https://confluence.atlassian.com/display/BitbucketServ
 
 _* Note: If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):7990` instead._
 
+## Reverse Proxy Settings
+
+If bitbucket is run behind a reverse proxy server as [described here](https://confluence.atlassian.com/bitbucketserver/proxying-and-securing-bitbucket-server-776640099.html),
+then you need to specify extra options to make bitbucket aware of the setup. They can be controlled via the below
+environment variables.
+
+* `CATALINA_CONNECTOR_PROXYNAME` (default: NONE)
+
+   The reverse proxy's fully qualified hostname.
+
+* `CATALINA_CONNECTOR_PROXYPORT` (default: NONE)
+
+   The reverse proxy's port number via which bitbucket is accessed.
+
+* `CATALINA_CONNECTOR_SCHEME` (default: http)
+
+   The protocol via which bitbucket is accessed.
+
+* `CATALINA_CONNECTOR_SECURE` (default: false)
+
+   Set 'true' if CATALINA_CONNECTOR_SCHEME is 'https'.
+
 # Upgrade
 
 To upgrade to a more recent version of Bitbucket Server you can simply stop the `bitbucket`
