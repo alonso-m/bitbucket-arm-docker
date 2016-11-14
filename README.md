@@ -1,6 +1,6 @@
 ![Atlassian Bitbucket Server](https://www.atlassian.com/dam/wac/legacy/bitbucket_logo_landing.png)
 
-Bitbucket Server is an on-premises source code management solution for Git that's secure, fast, and enterprise grade. Create and manage repositories, set up fine-grained permissions, and collaborate on code â€“ all with the flexibility of your servers.
+Bitbucket Server is an on-premises source code management solution for Git that's secure, fast, and enterprise grade. Create and manage repositories, set up fine-grained permissions, and collaborate on code – all with the flexibility of your servers.
 
 Learn more about Bitbucket Server: <https://www.atlassian.com/software/bitbucket/server>
 
@@ -15,7 +15,7 @@ For the `BITBUCKET_HOME` directory that is used to store the repository data
 
 ## For Bitbucket 4.12+
 
-In Bitbucket 4.12 and later versions, permissions of the volume is managed by entry scripts. To get started you can use a data volume, or named volumes. In this example we'll use named volumes.
+In Bitbucket 4.12 and later versions, volume permission is managed by entry scripts. To get started you can use a data volume, or named volumes. In this example we'll use named volumes.
 
     $> docker volume create --name bitbucketVolume
     $> docker run -v bitbucketVolume:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket-server
