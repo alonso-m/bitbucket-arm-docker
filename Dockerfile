@@ -37,9 +37,9 @@ RUN mkdir -p                             ${BITBUCKET_INSTALL_DIR} \
     && sed -i -e 's@$PRGDIR/catalina.sh@CATALINA_OPTS="$CATALINA_OPTS" $PRGDIR/catalina.sh@' -e 's@$PRGDIR/startup.sh@CATALINA_OPTS="$CATALINA_OPTS" $PRGDIR/startup.sh@' ${BITBUCKET_INSTALL_DIR}/bin/start-webapp.sh \
     && sed -i -e 's/port="7990"/port="7990" secure="${catalinaConnectorSecure}" scheme="${catalinaConnectorScheme}" proxyName="${catalinaConnectorProxyName}" proxyPort="${catalinaConnectorProxyPort}"/' ${BITBUCKET_INSTALL_DIR}/conf/server.xml
 
-COPY catalina-connector-opts.sh ${BITBUCKET_INSTALL_DIR}/bin/
 
-USER ${RUN_USER}:${RUN_GROUP}
+COPY entrypoint.sh              /entrypoint.sh
+COPY catalina-connector-opts.sh ${BITBUCKET_INSTALL_DIR}/bin/
 
 VOLUME ["${BITBUCKET_HOME}"]
 
@@ -52,4 +52,5 @@ EXPOSE 7999
 WORKDIR $BITBUCKET_INSTALL_DIR
 
 # Run in foreground
-CMD ["./bin/start-bitbucket.sh", "-fg"]
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["-fg"]
