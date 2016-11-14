@@ -20,7 +20,7 @@ In Bitbucket 4.12 and later versions, volume permission is managed by entry scri
     $> docker volume create --name bitbucketVolume
     $> docker run -v bitbucketVolume:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket-server
 
-## For other version
+## For other versions
 
 Set permissions for the data directory so that the runuser can write to it:
 
