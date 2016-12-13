@@ -7,7 +7,7 @@ if [ "$UID" -eq 0 ]; then
         chmod -R 700 "${BITBUCKET_HOME}" &&
         chown -R ${RUN_USER}:${RUN_GROUP} "${BITBUCKET_HOME}"
     # Now drop privileges
-    exec su -s /bin/bash -m ${RUN_USER} -c "$BITBUCKET_INSTALL_DIR/bin/start-bitbucket.sh $@" 
+    exec su -s /bin/bash ${RUN_USER} -c "$BITBUCKET_INSTALL_DIR/bin/start-bitbucket.sh $@" 
 else
     exec $BITBUCKET_INSTALL_DIR/bin/start-bitbucket.sh "$@"
 fi
