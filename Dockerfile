@@ -55,5 +55,5 @@ EXPOSE 7999
 WORKDIR $BITBUCKET_INSTALL_DIR
 
 # Run in foreground
-ENTRYPOINT ["/usr/local/bin/dumb-init", "/bin/bash", "/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/dumb-init", "/entrypoint.sh"]
 CMD ["-fg"]
