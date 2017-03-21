@@ -3,11 +3,14 @@ MAINTAINER Atlassian Bitbucket Server Team
 
 # Install git, download and extract Bitbucket Server and create the required directory layout.
 # Try to limit the number of RUN instructions to minimise the number of layers that will need to be created.
+# dumb-init is used to give proper signal handling to the app inside Docker
 RUN apt-get update -qq \
     && apt-get install -y --no-install-recommends git libtcnative-1 ssh \
     && apt-get clean autoclean \
     && apt-get autoremove --yes \
-    && rm -rf /var/lib/{apt,dpkg,cache,log}/
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
+    && wget -nv -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 \
+    && chmod +x /usr/local/bin/dumb-init
 
 # Use the default unprivileged account. This could be considered bad practice
 # on systems where multiple processes end up being executed by 'daemon' but
@@ -52,5 +55,5 @@ EXPOSE 7999
 WORKDIR $BITBUCKET_INSTALL_DIR
 
 # Run in foreground
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/dumb-init", "/bin/bash", "/entrypoint.sh"]
 CMD ["-fg"]
