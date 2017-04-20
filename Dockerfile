@@ -18,7 +18,6 @@ WORKDIR $BITBUCKET_HOME
 
 CMD ["-fg"]
 ENTRYPOINT ["/usr/local/bin/dumb-init", "/entrypoint.sh"]
-COPY entrypoint.sh              /entrypoint.sh
 
 RUN apk update -qq \
     && update-ca-certificates \
@@ -26,6 +25,8 @@ RUN apk update -qq \
     && wget -nv -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 \
     && chmod +x /usr/local/bin/dumb-init \
     && rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
+
+COPY entrypoint.sh              /entrypoint.sh
 
 ENV BITBUCKET_VERSION   5.0.0-eap2
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-${BITBUCKET_VERSION}.tar.gz
