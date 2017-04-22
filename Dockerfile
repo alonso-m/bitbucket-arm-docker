@@ -28,7 +28,7 @@ RUN apk update -qq \
 
 COPY entrypoint.sh              /entrypoint.sh
 
-ENV BITBUCKET_VERSION   5.0.0-eap2
+ENV BITBUCKET_VERSION   5.0.0-rc2
 ENV DOWNLOAD_URL        https://downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-${BITBUCKET_VERSION}.tar.gz
 
 RUN mkdir -p                             ${BITBUCKET_INSTALL_DIR} \
