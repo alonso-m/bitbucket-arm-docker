@@ -8,6 +8,8 @@ Learn more about Bitbucket Server: <https://www.atlassian.com/software/bitbucket
 
 This Docker container makes it easy to get an instance of Bitbucket up and running.
 
+** We strongly recommend you run this image using a specific version tag instead of latest. This is because image reference by the latest tag changes often and we cannot guarantee that it will be backwards compatible. **
+
 # Quick Start
 
 For the `BITBUCKET_HOME` directory that is used to store the repository data
@@ -44,9 +46,11 @@ _* Note: If you are using `docker-machine` on Mac OS X, please use `open http://
 
 ## Reverse Proxy Settings
 
-If bitbucket is run behind a reverse proxy server as [described here](https://confluence.atlassian.com/bitbucketserver/proxying-and-securing-bitbucket-server-776640099.html),
+If Bitbucket is run behind a reverse proxy server as [described here](https://confluence.atlassian.com/bitbucketserver/proxying-and-securing-bitbucket-server-776640099.html),
 then you need to specify extra options to make bitbucket aware of the setup. They can be controlled via the below
 environment variables.
+
+** Note: This method of configuring CATALINA_OPTS will be going away with Bitbucket 5.0 and will be replaced with Spring Boot environment variables. **
 
 * `CATALINA_CONNECTOR_PROXYNAME` (default: NONE)
 
@@ -89,11 +93,11 @@ Read more about data recovery and backups: [https://confluence.atlassian.com/dis
 
 # Versioning
 
-The `latest` tag matches the most recent release of Atlassian Bitbucket Server.
-Thus `atlassian/bitbucket:latest` will use the newest version of Bitbucket Server available.
+The `latest` tag matches the most recent version of this repository. Thus using `atlassian/bitbucket:latest` or `atlassian/bitbucket` will ensure you are running the most up to date version of this image.
 
-Alternatively you can use a specific minor version of Bitbucket Server by using a version number
-tag: `atlassian/bitbucket-server:4.0`. This will install the latest `4.0.x` version that
+However,  we ** strongly recommend ** that for non-eval workloads you select a specific version in order to prevent breaking changes from impacting your setup.
+You can use a specific minor version of Bitbucket Server by using a version number
+tag: `atlassian/bitbucket-server:4.14`. This will install the latest `4.14.x` version that
 is available.
 
 
