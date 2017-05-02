@@ -8,7 +8,7 @@ Learn more about Bitbucket Server: <https://www.atlassian.com/software/bitbucket
 
 This Docker container makes it easy to get an instance of Bitbucket up and running.
 
-** We strongly recommend you run this image using a specific version tag instead of latest. This is because image reference by the latest tag changes often and we cannot guarantee that it will be backwards compatible. **
+** We strongly recommend you run this image using a specific version tag instead of latest. This is because the image referenced by the latest tag changes often and we cannot guarantee that it will be backwards compatible. **
 
 # Quick Start
 
