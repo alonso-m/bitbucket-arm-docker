@@ -1,5 +1,19 @@
 #!/bin/bash
 
+# Setup Catalina Opts
+: ${CATALINA_CONNECTOR_PROXYNAME:=}
+: ${CATALINA_CONNECTOR_PROXYPORT:=}
+: ${CATALINA_CONNECTOR_SCHEME:=http}
+: ${CATALINA_CONNECTOR_SECURE:=false}
+
+: ${CATALINA_OPTS:=}
+CATALINA_OPTS="${CATALINA_OPTS} -DcatalinaConnectorProxyName=${CATALINA_CONNECTOR_PROXYNAME}"
+CATALINA_OPTS="${CATALINA_OPTS} -DcatalinaConnectorProxyPort=${CATALINA_CONNECTOR_PROXYPORT}"
+CATALINA_OPTS="${CATALINA_OPTS} -DcatalinaConnectorScheme=${CATALINA_CONNECTOR_SCHEME}"
+CATALINA_OPTS="${CATALINA_OPTS} -DcatalinaConnectorSecure=${CATALINA_CONNECTOR_SECURE}"
+
+JAVA_OPTS="${JAVA_OPTS} ${CATALINA_OPTS}"
+
 # Start Bitbucket as the correct user.
 if [ "$UID" -eq 0 ]; then
     echo "User is currently root. Will change directory ownership to ${RUN_USER}:${RUN_GROUP}, then downgrade permission to ${RUN_USER}"
