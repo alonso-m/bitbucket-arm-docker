@@ -50,7 +50,27 @@ If Bitbucket is run behind a reverse proxy server as [described here](https://co
 then you need to specify extra options to make bitbucket aware of the setup. They can be controlled via the below
 environment variables.
 
-** Note: This method of configuring CATALINA_OPTS will be going away with Bitbucket 5.0 and will be replaced with Spring Boot environment variables. **
+### Bitbucket Server 5.0 + 
+
+Due to the migration to Spring Boot in 5.0, there are changes to how you set up Bitbucket to run behind a reverse proxy.
+
+In this example, we'll use a environment file. You can also do this via specifying each environment variable via the `-e` argument in `docker run`. 
+
+#### secure-bitbucket.env
+```
+SERVER_SECURE=true
+SERVER_SCHEME=https
+SERVER_PROXY_PORT=443
+SERVER_PROXY_NAME=<Your url here>
+```
+
+Then you run bitbucket as usual
+
+`docker run -v bitbucketVolume:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 --env-file=/path/to/env/file/secure-bitbucket.env atlassian/bitbucket-server`
+
+### Bitbucket Server < 5.0
+
+To set the reverse proxy arguments, you specify the following as environment variables in the `docker run` command
 
 * `CATALINA_CONNECTOR_PROXYNAME` (default: NONE)
 
@@ -66,7 +86,7 @@ environment variables.
 
 * `CATALINA_CONNECTOR_SECURE` (default: false)
 
-   Set 'true' if CATALINA_CONNECTOR_SCHEME is 'https'.
+   Set 'true' if CATALINA\_CONNECTOR\_SCHEME is 'https'.
 
 # Upgrade
 
@@ -75,6 +95,7 @@ container and start a new one based on a more recent image:
 
     $> docker stop bitbucket
     $> docker rm bitbucket
+    $> docker pull atlassian/bitbucket-server:<desired_version>
     $> docker run ... (See above)
 
 As your data is stored in the data volume directory on the host it will still
@@ -103,9 +124,7 @@ is available.
 
 # Issue tracker
 
-Please raise an
-[issue](https://bitbucket.org/atlassian/docker-atlassian-bitbucket-server/issues) if you
-encounter any problems with this Dockerfile.
+Please raise an [issue](https://bitbucket.org/atlassian/docker-atlassian-bitbucket-server/issues) if you encounter any problems with this Dockerfile.
 
 # Support
 
