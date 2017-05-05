@@ -54,7 +54,7 @@ environment variables.
 
 Due to the migration to Spring Boot in 5.0, there are changes to how you set up Bitbucket to run behind a reverse proxy.
 
-In this example, we'll use a environment file. You can also do this via specifying each environment variable via the `-e` argument in `docker run`. 
+In this example, we'll use an environment file. You can also do this via [specifying each environment variable](https://docs.docker.com/engine/reference/run/#env-environment-variables) via the `-e` argument in `docker run`. 
 
 #### secure-bitbucket.env
 ```
@@ -64,9 +64,9 @@ SERVER_PROXY_PORT=443
 SERVER_PROXY_NAME=<Your url here>
 ```
 
-Then you run bitbucket as usual
+Then you run Bitbucket as usual
 
-`docker run -v bitbucketVolume:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 --env-file=/path/to/env/file/secure-bitbucket.env atlassian/bitbucket-server`
+`docker run -v bitbucketVolume:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 --env-file=/path/to/env/file/secure-bitbucket.env atlassian/bitbucket-server:5.0`
 
 ### Bitbucket Server < 5.0
 
