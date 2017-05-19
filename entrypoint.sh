@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 # Setup Catalina Opts
 : ${CATALINA_CONNECTOR_PROXYNAME:=}
@@ -17,12 +18,12 @@ JAVA_OPTS="${JAVA_OPTS} ${CATALINA_OPTS}"
 ARGS="$@"
 
 # Start Bitbucket without Elasticsearch
-if [ "$ELASTICSEARCH_ENABLED" == "false" ] || [ "$APPLICATION_MODE" == "mirror" ]; then
+if [ "${ELASTICSEARCH_ENABLED}" == "false" ] || [ "${APPLICATION_MODE}" == "mirror" ]; then
     ARGS="--no-search ${ARGS}"
 fi
 
 # Start Bitbucket as the correct user.
-if [ "$UID" -eq 0 ]; then
+if [ "${UID}" -eq 0 ]; then
     echo "User is currently root. Will change directory ownership to ${RUN_USER}:${RUN_GROUP}, then downgrade permission to ${RUN_USER}"
     mkdir -p "${BITBUCKET_HOME}/lib" &&
         chmod -R 700 "${BITBUCKET_HOME}" &&
