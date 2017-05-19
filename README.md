@@ -88,6 +88,39 @@ To set the reverse proxy arguments, you specify the following as environment var
 
    Set 'true' if CATALINA\_CONNECTOR\_SCHEME is 'https'.
 
+## Application Mode Settings (Bitbucket Server 5.0 + only)
+
+This docker image can be run as a [Smart Mirror](https://confluence.atlassian.com/bitbucketserver/smart-mirroring-776640046.html) or as part of a [Data Center](https://confluence.atlassian.com/enterprise/bitbucket-data-center-668468332.html) cluster. 
+You can specify the following properties to start Bitbucket as a mirror or as a Data Center node:
+
+* `ELASTICSEARCH_ENABLED` (default: true)
+
+  Set 'false' to prevent Elasticsearch from starting in the container. This should be used if Elasticsearch is running remotely, e.g. for if Bitbucket is running in a Data Center cluster
+
+* `APPLICATION_MODE` (default: default)
+
+   The mode Bitbucket will run in. This can be set to 'mirror' to start Bitbucket as a Smart Mirror. This will also disable Elasticsearch even if `ELASTICSEARCH_ENABLED` has not been set to 'false'.
+
+* `HAZELCAST_NETWORK_MULTICAST` (default: false)
+
+   Data Center: Set 'true' to enable Bitbucket to find new Data Center cluster members via multicast. `HAZELCAST_NETWORK_TCPIP` should not be specified when using this setting.
+
+* `HAZELCAST_NETWORK_TCPIP` (default: false)
+
+   Data Center: Set 'true' to enable Bitbucket to find new Data Center cluster members via TCPIP. This setting requires `HAZELCAST_NETWORK_TCPIP_MEMBERS` to be specified. `HAZELCAST_NETWORK_MULTICAST` should not be specified when using this setting.
+
+* `HAZELCAST_NETWORK_TCPIP_MEMBERS`
+
+   Data Center: List of members that Hazelcast nodes should connect to when HAZELCAST_NETWORK_TCPIP is 'true'
+
+* `HAZELCAST_GROUP_NAME`
+
+   Data Center: Specifies the cluster group the instance should join.
+
+* `HAZELCAST_GROUP_PASSWORD`
+
+   Data Center: The password required to join the specified cluster group.
+
 # Upgrade
 
 To upgrade to a more recent version of Bitbucket Server you can simply stop the `bitbucket`
