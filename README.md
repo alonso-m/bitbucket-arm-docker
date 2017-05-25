@@ -120,6 +120,16 @@ You can specify the following properties to start Bitbucket as a mirror or as a 
 * `HAZELCAST_GROUP_PASSWORD`
 
    Data Center: The password required to join the specified cluster group.
+   
+To run Bitbucket as part of a Data Center cluster, create a Docker network and assign the Bitbucket container a static IP. 
+
+Note: Docker networks may support multicast, however the below example shows configuration using TCPIP.
+
+    $> docker network create --driver bridge --subnet=172.18.0.0/16 myBitbucketNetwork
+    $> docker run --network=myBitbucketNetwork --ip=172.18.1.1 -e ELASTICSEARCH_ENABLED=false \
+        -e HAZELCAST_NETWORK_TCPIP=true -e HAZELCAST_NETWORK_TCPIP_MEMBERS=172.18.1.1:5701,172.18.1.2:5701,172.18.1.3:5701 \
+        -e HAZELCAST_GROUP_NAME=bitbucket -e HAZELCAST_GROUP_PASSWORD=mysecretpassword \
+        -v /data/bitbucket:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket-server
 
 # Upgrade
 
