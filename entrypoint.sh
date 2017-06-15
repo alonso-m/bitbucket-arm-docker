@@ -37,5 +37,5 @@ if [ "${UID}" -eq 0 ]; then
     # Now drop privileges
     exec su -s /bin/bash "${RUN_USER}" -c "${BITBUCKET_INSTALL_DIR}/bin/start-bitbucket.sh ${ARGS}"
 else
-    exec "${BITBUCKET_INSTALL_DIR}/bin/start-bitbucket.sh ${ARGS}"
+    exec "${BITBUCKET_INSTALL_DIR}/bin/start-bitbucket.sh" ${ARGS}
 fi
