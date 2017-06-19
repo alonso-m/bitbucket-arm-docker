@@ -1,4 +1,4 @@
-FROM openjdk:8-alpine
+FROM openjdk:8u121-alpine
 MAINTAINER Atlassian Bitbucket Server Team
 
 ENV RUN_USER            daemon
