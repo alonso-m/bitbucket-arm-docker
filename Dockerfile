@@ -17,13 +17,11 @@ EXPOSE 7999
 WORKDIR $BITBUCKET_HOME
 
 CMD ["/entrypoint.sh", "-fg"]
-ENTRYPOINT ["/usr/local/bin/dumb-init"]
+ENTRYPOINT ["/sbin/tini", "--"]
 
 RUN apk update -qq \
     && update-ca-certificates \
-    && apk add ca-certificates wget curl git openssh bash procps openssl perl ttf-dejavu\
-    && wget -nv -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 \
-    && chmod +x /usr/local/bin/dumb-init \
+    && apk add ca-certificates wget curl git openssh bash procps openssl perl ttf-dejavu tini \
     && rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
 
 COPY entrypoint.sh              /entrypoint.sh
