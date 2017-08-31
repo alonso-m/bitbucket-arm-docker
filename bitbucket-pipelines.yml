@@ -1,0 +1,31 @@
+image: dchevell/docker-release-maker:latest
+clone:
+  depth: full
+
+pipelines:
+  custom:
+    create-release-base-5:
+      - step:
+          script:
+            - git fetch --all
+            - export BASE_BRANCH=base-5
+            - export BASE_VERSION=5
+            - export DOCKER_REPO=atlassian/bitbucket-server
+            - export DOCKERFILE_VERSION_STRING=BITBUCKET_VERSION
+            - export GIT_USER=pipelinesagent
+            - export GIT_EMAIL=pipelines-agent@atlassian.com
+            - export MAC_PRODUCT_KEY=bitbucket
+            - python /usr/src/app/create_release.py
+  branches:
+    base-5:
+      - step:
+          script:
+            - git fetch --all
+            - export BASE_BRANCH=base-5
+            - export BASE_VERSION=5
+            - export DOCKER_REPO=atlassian/bitbucket-server
+            - export DOCKERFILE_VERSION_STRING=BITBUCKET_VERSION
+            - export GIT_USER=pipelinesagent
+            - export GIT_EMAIL=pipelines-agent@atlassian.com
+            - export MAC_PRODUCT_KEY=bitbucket
+            - python /usr/src/app/update_release.py
