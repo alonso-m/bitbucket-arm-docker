@@ -37,6 +37,7 @@ if [ "${UID}" -eq 0 ]; then
     PERMISSIONS_SIGNATURE=$(stat -c "%u:%U:%a" "${BITBUCKET_HOME}")
     EXPECTED_PERMISSIONS=$(id -u ${RUN_USER}):${RUN_USER}:700
     if [ "${PERMISSIONS_SIGNATURE}" != "${EXPECTED_PERMISSIONS}" ]; then
+        echo "Updating permissions for BITBUCKET_HOME"
         mkdir -p "${BITBUCKET_HOME}/lib" &&
             chmod -R 700 "${BITBUCKET_HOME}" &&
             chown -R "${RUN_USER}:${RUN_GROUP}" "${BITBUCKET_HOME}"
