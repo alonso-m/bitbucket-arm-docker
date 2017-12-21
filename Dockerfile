@@ -1,4 +1,4 @@
-FROM openjdk:8u131-jdk-alpine
+FROM openjdk:8-jdk-alpine
 MAINTAINER Atlassian Bitbucket Server Team
 
 ENV RUN_USER            daemon
@@ -21,7 +21,7 @@ ENTRYPOINT ["/sbin/tini", "--"]
 
 RUN apk update -qq \
     && update-ca-certificates \
-    && apk add ca-certificates wget curl git openssh bash procps openssl perl ttf-dejavu tini \
+    && apk add ca-certificates wget curl git git-daemon openssh bash procps openssl perl ttf-dejavu tini \
     && rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
 
 COPY entrypoint.sh              /entrypoint.sh
