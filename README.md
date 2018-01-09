@@ -88,6 +88,22 @@ To set the reverse proxy arguments, you specify the following as environment var
 
    Set 'true' if CATALINA\_CONNECTOR\_SCHEME is 'https'.
 
+## JVM Configuration (Bitbucket Server 5.0 + only)
+
+If you need to override Bitbucket Server's default memory configuration or pass additional JVM arguments, use the environment variables below
+
+* `JVM_MINIMUM_MEMORY` (default: 512m)
+
+   The minimum heap size of the JVM
+
+* `JVM_MAXIMUM_MEMORY` (default: 1024m)
+
+   The maximum heap size of the JVM
+
+* `JVM_SUPPORT_RECOMMENDED_ARGS` (default: NONE)
+
+   Additional JVM arguments for Bitbucket Server, such as a custom Java Trust Store
+
 ## Application Mode Settings (Bitbucket Server 5.0 + only)
 
 This docker image can be run as a [Smart Mirror](https://confluence.atlassian.com/bitbucketserver/smart-mirroring-776640046.html) or as part of a [Data Center](https://confluence.atlassian.com/enterprise/bitbucket-data-center-668468332.html) cluster. 
@@ -130,6 +146,38 @@ Note: Docker networks may support multicast, however the below example shows con
         -e HAZELCAST_NETWORK_TCPIP=true -e HAZELCAST_NETWORK_TCPIP_MEMBERS=172.18.1.1:5701,172.18.1.2:5701,172.18.1.3:5701 \
         -e HAZELCAST_GROUP_NAME=bitbucket -e HAZELCAST_GROUP_PASSWORD=mysecretpassword \
         -v /data/bitbucket-shared:/var/atlassian/application-data/bitbucket/shared --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket-server
+
+## JMX Monitoring (Bitbucket Server 5.0 + only)
+
+Bitbucket Server supports detailed JMX monitoring. To enable and configure JMX, use the environment variables below. For further information on JMX configuration, see [Enabling JMX counters for performance monitoring](https://confluence.atlassian.com/bitbucketserver/enabling-jmx-counters-for-performance-monitoring-776640189.html)
+
+* `JMX_ENABLED` (default: false)
+
+   Enable Bitbucket to publish JMX data
+
+* `JMX_REMOTE_AUTH` (default: NONE)
+
+   Set the authentication to use for remote JMX access. This value is required: anything other than "password" or "ssl" will cause remote JMX access to be disabled
+
+* `JMX_REMOTE_PORT` (default: 3333)
+
+   The port used to negotiate a JMX connection. Note: this port is only used during the initial authorization, after which a different RMI port used for data transfer
+
+* `JMX_REMOTE_RMI_PORT` (default: <random>)
+
+   The port used for all subsequent JMX-RMI data transfer. If desired, the RMI data port can be set to the same value as `JMX_REMOTE_PORT` to allow a single port to be used for both JMX authorization and data transfer
+
+* `RMI_SERVER_HOSTNAME` (default: NONE)
+
+   The hostname or IP address that clients will use to connect to the application for JMX monitoring. This must be resolvable by both clients and from the JVM host machine.
+
+* `JMX_PASSWORD_FILE` (default: NONE)
+
+   The full path to the JMX username/password file used to authenticate remote JMX clients. This is required when `JMX_REMOTE_AUTH` is set to "password"
+
+    $> docker run -e JMX_ENABLED=true -e JMX_REMOTE_AUTH=password -e JMX_REMOTE_RMI_PORT=3333 -e RMI_SERVER_HOSTNAME=bitbucket \
+        -e JMX_PASSWORD_FILE=/data/bitbucket:/var/atlassian/application-data/bitbucket/jmx.access \
+        -v /data/bitbucket:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 -p 3333:3333 atlassian/bitbucket-server
 
 # Upgrade
 
