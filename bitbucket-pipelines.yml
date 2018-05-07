@@ -12,8 +12,8 @@ pipelines:
             - export BASE_VERSION=5
             - export DOCKER_REPO=atlassian/bitbucket-server
             - export DOCKERFILE_VERSION_STRING=BITBUCKET_VERSION
-            - export GIT_USER=pipelinesagent
-            - export GIT_EMAIL=pipelines-agent@atlassian.com
+            - export GIT_USER=bbs-pipelines-bot
+            - export GIT_EMAIL=bbs-pipelines-bot@atlassian.com
             - export MAC_PRODUCT_KEY=bitbucket
             - python /usr/src/app/create_release.py
   branches:
@@ -25,7 +25,7 @@ pipelines:
             - export BASE_VERSION=5
             - export DOCKER_REPO=atlassian/bitbucket-server
             - export DOCKERFILE_VERSION_STRING=BITBUCKET_VERSION
-            - export GIT_USER=pipelinesagent
-            - export GIT_EMAIL=pipelines-agent@atlassian.com
+            - export GIT_USER=bbs-pipelines-bot
+            - export GIT_EMAIL=bbs-pipelines-bot@atlassian.com
             - export MAC_PRODUCT_KEY=bitbucket
             - python /usr/src/app/update_release.py
