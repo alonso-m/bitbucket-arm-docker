@@ -16,6 +16,21 @@ pipelines:
             - export GIT_EMAIL=bbs-pipelines-bot@atlassian.com
             - export MAC_PRODUCT_KEY=bitbucket
             - python /usr/src/app/create_release.py
+    test:
+      - step:
+          image: docker:stable-git
+          script:
+            # Run bitbucket docker image
+            - mkdir -p data
+            - |
+                docker run -v $(pwd)/data:/var/atlassian/application-data/bitbucket \
+                  --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket-server
+            # Run tests
+            - git show origin/scripts:scripts/test-bitbucket-status.sh | install -m 0755 /dev/fd/0 test-bitbucket-status.sh
+            - ./test-bitbucket-status.sh
+          services:
+            - docker
+
   branches:
     base-5:
       - step:
