@@ -19,10 +19,7 @@ WORKDIR $BITBUCKET_HOME
 CMD ["/entrypoint.sh", "-fg"]
 ENTRYPOINT ["/sbin/tini", "--"]
 
-RUN apk update -qq \
-    && update-ca-certificates \
-    && apk add ca-certificates wget curl git git-daemon openssh bash procps openssl perl ttf-dejavu tini \
-    && rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
+RUN apk add --no-cache wget curl git git-daemon openssh bash procps openssl perl ttf-dejavu tini
 
 COPY entrypoint.sh              /entrypoint.sh
 
