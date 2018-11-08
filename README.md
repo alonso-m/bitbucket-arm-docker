@@ -15,20 +15,12 @@ This Docker container makes it easy to get an instance of Bitbucket up and runni
 For the `BITBUCKET_HOME` directory that is used to store the repository data
 (amongst other things) we recommend mounting a host directory as a [data volume](https://docs.docker.com/engine/tutorials/dockervolumes/#/data-volumes), or via a named volume if using a docker version >= 1.9. 
 
-## For Bitbucket 4.12+
-
-In Bitbucket 4.12 and later versions, volume permission is managed by entry scripts. To get started you can use a data volume, or named volumes. In this example we'll use named volumes.
+Volume permission is managed by entry scripts. To get started you can use a data volume, or named volumes. In this example we'll use named volumes.
 
     $> docker volume create --name bitbucketVolume
     $> docker run -v bitbucketVolume:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket-server
 
-## For other versions
-
-Set permissions for the data directory so that the runuser can write to it:
-
-    $> docker run -u root -v /data/bitbucket:/var/atlassian/application-data/bitbucket atlassian/bitbucket-server chown -R daemon  /var/atlassian/application-data/bitbucket
-    
-Note that this command can be replaced by named volumes.
+Note that this command can substitute folder paths with named volumes.
 
 Start Atlassian Bitbucket Server:
 
