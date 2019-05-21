@@ -2,7 +2,7 @@ image: atlassian/docker-release-maker:latest
 
 pipelines:
   custom:
-    create-release-base-6:
+    base-6-create-releases:
       - step:
           services:
             - docker
@@ -15,6 +15,17 @@ pipelines:
             - export TAG_SUFFIXES='jdk8,ubuntu'
             - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
             - python /usr/src/app/run.py --create
+    base-6-create-custom-release:
+      - variables:
+          - name: BITBUCKET_VERSION
+          - name: DOCKER_TAG
+      - step:
+          services:
+            - docker
+          script:
+            - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
+            - docker build -t atlassian/bitbucket-server:${DOCKER_TAG} --build-arg BITBUCKET_VERSION=${BITBUCKET_VERSION} .
+            - docker push atlassian/bitbucket-server:${DOCKER_TAG}
   branches:
     base-6:
       - step:
