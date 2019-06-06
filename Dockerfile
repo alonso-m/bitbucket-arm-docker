@@ -18,7 +18,7 @@ CMD ["/entrypoint.sh", "-fg"]
 ENTRYPOINT ["/tini", "--"]
 
 RUN apt-get update \
-	&& apt-get install -y --no-install-recommends fontconfig git perl \
+	&& apt-get install -y --no-install-recommends fontconfig git openssh-client perl \
 	&& apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 ARG TINI_VERSION=v0.18.0
