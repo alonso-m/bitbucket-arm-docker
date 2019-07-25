@@ -1,4 +1,5 @@
-FROM adoptopenjdk/openjdk8:slim
+ARG BASE_IMAGE=adoptopenjdk/openjdk8:slim
+FROM $BASE_IMAGE
 
 ENV RUN_USER            					daemon
 ENV RUN_GROUP           					daemon
