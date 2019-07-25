@@ -2,7 +2,7 @@ image: atlassian/docker-release-maker:latest
 
 pipelines:
   custom:
-    base-6-create-releases:
+    jdk8-new-releases:
       - step:
           services:
             - docker
@@ -15,7 +15,7 @@ pipelines:
             - export TAG_SUFFIXES='jdk8,ubuntu'
             - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
             - python /usr/src/app/run.py --create
-    base-6-create-custom-release:
+    jdk8-custom-release:
       - variables:
           - name: BITBUCKET_VERSION
           - name: DOCKER_TAG
@@ -24,8 +24,39 @@ pipelines:
             - docker
           script:
             - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
-            - docker build -t atlassian/bitbucket-server:${DOCKER_TAG} --build-arg BITBUCKET_VERSION=${BITBUCKET_VERSION} .
+            - >
+              docker build -t atlassian/bitbucket-server:${DOCKER_TAG}
+              --build-arg BITBUCKET_VERSION=${BITBUCKET_VERSION} .
             - docker push atlassian/bitbucket-server:${DOCKER_TAG}
+    jdk11-new-releases:
+      - step:
+          services:
+            - docker
+          script:
+            - export BASE_VERSION='6'
+            - export DEFAULT_RELEASE='false'
+            - export DOCKER_REPO='atlassian/bitbucket-server'
+            - export DOCKERFILE_BUILDARGS='BASE_IMAGE=adoptopenjdk/openjdk11:slim'
+            - export DOCKERFILE_VERSION_ARG='BITBUCKET_VERSION'
+            - export MAC_PRODUCT_KEY='bitbucket'
+            - export TAG_SUFFIXES='jdk11,ubuntu-jdk11'
+            - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
+            - python /usr/src/app/run.py --create
+    jdk11-custom-release:
+      - variables:
+          - name: BITBUCKET_VERSION
+          - name: DOCKER_TAG
+      - step:
+          services:
+            - docker
+          script:
+            - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
+            - >
+              docker build -t atlassian/bitbucket-server:${DOCKER_TAG}
+              --build-arg BASE_IMAGE=adoptopenjdk/openjdk11:slim
+              --build-arg BITBUCKET_VERSION=${BITBUCKET_VERSION} .
+            - docker push atlassian/bitbucket-server:${DOCKER_TAG}
+    
   branches:
     base-6:
       - step:
@@ -38,5 +69,18 @@ pipelines:
             - export DOCKERFILE_VERSION_ARG='BITBUCKET_VERSION'
             - export MAC_PRODUCT_KEY='bitbucket'
             - export TAG_SUFFIXES='jdk8,ubuntu'
+            - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
+            - python /usr/src/app/run.py --update
+      - step:
+          services:
+            - docker
+          script:
+            - export BASE_VERSION='6'
+            - export DEFAULT_RELEASE='false'
+            - export DOCKER_REPO='atlassian/bitbucket-server'
+            - export DOCKERFILE_BUILDARGS='BASE_IMAGE=adoptopenjdk/openjdk11:slim'
+            - export DOCKERFILE_VERSION_ARG='BITBUCKET_VERSION'
+            - export MAC_PRODUCT_KEY='bitbucket'
+            - export TAG_SUFFIXES='jdk11,ubuntu-jdk11'
             - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
             - python /usr/src/app/run.py --update
