@@ -59,7 +59,7 @@ pipelines:
             - docker push atlassian/bitbucket-server:${DOCKER_TAG}
     
   branches:
-    base-6:
+    master:
       - step:
           name: Bitbucket JDK 8
           services:
