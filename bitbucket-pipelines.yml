@@ -57,7 +57,6 @@ pipelines:
               --build-arg BASE_IMAGE=adoptopenjdk/openjdk11:slim
               --build-arg BITBUCKET_VERSION=${BITBUCKET_VERSION} .
             - docker push atlassian/bitbucket-server:${DOCKER_TAG}
-    
   branches:
     master:
       - step:
@@ -87,3 +86,16 @@ pipelines:
             - export TAG_SUFFIXES='jdk11,ubuntu-jdk11'
             - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
             - python /usr/src/app/run.py --update
+  pull-requests:
+    '**':
+      - step:
+          image: python:3.7-alpine3.9
+          services:
+            - docker
+          script:
+            - pip install -q -r tests/test-requirements.txt
+            - py.test tests/
+definitions:
+  services:
+    docker:
+      memory: 2048

@@ -39,46 +39,24 @@ _* Note: If you are using `docker-machine` on Mac OS X, please use `open http://
 ## Reverse Proxy Settings
 
 If Bitbucket is run behind a reverse proxy server as [described here](https://confluence.atlassian.com/bitbucketserver/proxying-and-securing-bitbucket-server-776640099.html),
-then you need to specify extra options to make bitbucket aware of the setup. They can be controlled via the below
+then you need to specify extra options to make Bitbucket aware of the setup. They can be controlled via the below
 environment variables.
 
-### Bitbucket Server 5.0 + 
-
-Due to the migration to Spring Boot in 5.0, there are changes to how you set up Bitbucket to run behind a reverse proxy.
-
-In this example, we'll use an environment file. You can also do this via [specifying each environment variable](https://docs.docker.com/engine/reference/run/#env-environment-variables) via the `-e` argument in `docker run`. 
-
-#### secure-bitbucket.env
-```
-SERVER_SECURE=true
-SERVER_SCHEME=https
-SERVER_PROXY_PORT=443
-SERVER_PROXY_NAME=<Your url here>
-```
-
-Then you run Bitbucket as usual
-
-`docker run -v bitbucketVolume:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 --env-file=/path/to/env/file/secure-bitbucket.env atlassian/bitbucket-server:5.0`
-
-### Bitbucket Server < 5.0
-
-To set the reverse proxy arguments, you specify the following as environment variables in the `docker run` command
-
-* `CATALINA_CONNECTOR_PROXYNAME` (default: NONE)
+* `SERVER_PROXY_NAME` (default: NONE)
 
    The reverse proxy's fully qualified hostname.
 
-* `CATALINA_CONNECTOR_PROXYPORT` (default: NONE)
+* `SERVER_PROXY_PORT` (default: NONE)
 
    The reverse proxy's port number via which bitbucket is accessed.
 
-* `CATALINA_CONNECTOR_SCHEME` (default: http)
+* `SERVER_SCHEME` (default: http)
 
    The protocol via which bitbucket is accessed.
 
-* `CATALINA_CONNECTOR_SECURE` (default: false)
+* `SERVER_SECURE` (default: false)
 
-   Set 'true' if CATALINA\_CONNECTOR\_SCHEME is 'https'.
+   Set 'true' if SERVER\_SCHEME is 'https'.
 
 ## JVM Configuration (Bitbucket Server 5.0 + only)
 
