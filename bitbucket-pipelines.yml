@@ -4,19 +4,6 @@ pipelines:
   custom:
     new-releases:
       - step:
-          name: Bitbucket JDK 8
-          services:
-            - docker
-          script:
-            - export BASE_VERSION='6'
-            - export DEFAULT_RELEASE='true'
-            - export DOCKER_REPO='atlassian/bitbucket-server'
-            - export DOCKERFILE_VERSION_ARG='BITBUCKET_VERSION'
-            - export MAC_PRODUCT_KEY='bitbucket'
-            - export TAG_SUFFIXES='jdk8,ubuntu'
-            - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
-            - python /usr/src/app/run.py --create
-      - step:
           name: Bitbucket JDK 11
           services:
             - docker
@@ -28,6 +15,19 @@ pipelines:
             - export DOCKERFILE_VERSION_ARG='BITBUCKET_VERSION'
             - export MAC_PRODUCT_KEY='bitbucket'
             - export TAG_SUFFIXES='jdk11,ubuntu-jdk11'
+            - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
+            - python /usr/src/app/run.py --create
+      - step:
+          name: Bitbucket JDK 8
+          services:
+            - docker
+          script:
+            - export BASE_VERSION='6'
+            - export DEFAULT_RELEASE='true'
+            - export DOCKER_REPO='atlassian/bitbucket-server'
+            - export DOCKERFILE_VERSION_ARG='BITBUCKET_VERSION'
+            - export MAC_PRODUCT_KEY='bitbucket'
+            - export TAG_SUFFIXES='jdk8,ubuntu'
             - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
             - python /usr/src/app/run.py --create
     jdk8-custom-release:
@@ -60,19 +60,6 @@ pipelines:
   branches:
     master:
       - step:
-          name: Bitbucket JDK 8
-          services:
-            - docker
-          script:
-            - export BASE_VERSION='6'
-            - export DEFAULT_RELEASE='true'
-            - export DOCKER_REPO='atlassian/bitbucket-server'
-            - export DOCKERFILE_VERSION_ARG='BITBUCKET_VERSION'
-            - export MAC_PRODUCT_KEY='bitbucket'
-            - export TAG_SUFFIXES='jdk8,ubuntu'
-            - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
-            - python /usr/src/app/run.py --update
-      - step:
           name: Bitbucket JDK 11
           services:
             - docker
@@ -84,6 +71,19 @@ pipelines:
             - export DOCKERFILE_VERSION_ARG='BITBUCKET_VERSION'
             - export MAC_PRODUCT_KEY='bitbucket'
             - export TAG_SUFFIXES='jdk11,ubuntu-jdk11'
+            - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
+            - python /usr/src/app/run.py --update
+      - step:
+          name: Bitbucket JDK 8
+          services:
+            - docker
+          script:
+            - export BASE_VERSION='6'
+            - export DEFAULT_RELEASE='true'
+            - export DOCKER_REPO='atlassian/bitbucket-server'
+            - export DOCKERFILE_VERSION_ARG='BITBUCKET_VERSION'
+            - export MAC_PRODUCT_KEY='bitbucket'
+            - export TAG_SUFFIXES='jdk8,ubuntu'
             - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
             - python /usr/src/app/run.py --update
   pull-requests:
