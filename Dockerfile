@@ -26,12 +26,12 @@ ARG TINI_VERSION=v0.18.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
 
-COPY entrypoint.sh             				/entrypoint.sh
-
 ARG BITBUCKET_VERSION
 ARG DOWNLOAD_URL=https://product-downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-${BITBUCKET_VERSION}.tar.gz
 
 RUN mkdir -p                             	${BITBUCKET_INSTALL_DIR} \
     && curl -L --silent                  	${DOWNLOAD_URL} | tar -xz --strip-components=1 -C "${BITBUCKET_INSTALL_DIR}" \
-    && chown -R ${RUN_USER}:${RUN_GROUP} 	${BITBUCKET_INSTALL_DIR}/ \
+    && chown -R root.                           ${BITBUCKET_INSTALL_DIR}/ \
     && sed -i -e 's/^# umask/umask/' 		${BITBUCKET_INSTALL_DIR}/bin/_start-webapp.sh
+
+COPY entrypoint.sh             				/entrypoint.sh
