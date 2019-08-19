@@ -1,8 +1,10 @@
 ARG BASE_IMAGE=adoptopenjdk/openjdk8:slim
 FROM $BASE_IMAGE
 
-ENV RUN_USER            					daemon
-ENV RUN_GROUP           					daemon
+ENV RUN_USER							bitbucket
+ENV RUN_GROUP							bitbucket
+ENV RUN_UID							2003
+ENV RUN_GID							2003
 
 # https://confluence.atlassian.com/display/BitbucketServer/Bitbucket+Server+home+directory
 ENV BITBUCKET_HOME          				/var/atlassian/application-data/bitbucket
@@ -16,22 +18,27 @@ EXPOSE 7990
 EXPOSE 7999
 
 CMD ["/entrypoint.sh", "-fg"]
-ENTRYPOINT ["/tini", "--"]
+ENTRYPOINT ["/sbin/tini", "--"]
 
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends fontconfig git openssh-client perl \
 	&& apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 ARG TINI_VERSION=v0.18.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /sbin/tini
+RUN chmod +x /sbin/tini
 
 ARG BITBUCKET_VERSION
 ARG DOWNLOAD_URL=https://product-downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-${BITBUCKET_VERSION}.tar.gz
 
-RUN mkdir -p                             	${BITBUCKET_INSTALL_DIR} \
+RUN groupadd --gid ${RUN_GID} ${RUN_GROUP} \
+    && useradd --uid ${RUN_UID} --gid ${RUN_GID} --home-dir ${BITBUCKET_HOME} ${RUN_USER} \
+    \
+    && mkdir -p                             	${BITBUCKET_INSTALL_DIR} \
     && curl -L --silent                  	${DOWNLOAD_URL} | tar -xz --strip-components=1 -C "${BITBUCKET_INSTALL_DIR}" \
+    && chmod -R "u=rwX,g=rX,o=rX"               ${BITBUCKET_INSTALL_DIR}/ \
     && chown -R root.                           ${BITBUCKET_INSTALL_DIR}/ \
+    \
     && sed -i -e 's/^# umask/umask/' 		${BITBUCKET_INSTALL_DIR}/bin/_start-webapp.sh
 
 COPY entrypoint.sh             				/entrypoint.sh

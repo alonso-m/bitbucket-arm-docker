@@ -107,3 +107,10 @@ def test_install_permissions(docker_cli, image):
     assert container.file(f'{BB_INSTALL}').user == 'root'
     assert container.file(f'{BB_INSTALL}/app/META-INF/MANIFEST.MF').user == 'root'
     assert container.file(f'{BB_INSTALL}/bin/start-bitbucket.sh').user == 'root'
+
+def test_home_permissions(docker_cli, image):
+    container = run_image(docker_cli, image)
+    jvm = wait_for_proc(container, BB_MAIN_CLASS)
+
+    assert container.file(f'{BB_HOME}').user == 'bitbucket'
+
