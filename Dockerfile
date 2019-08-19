@@ -9,6 +9,8 @@ ENV RUN_GID							2003
 # https://confluence.atlassian.com/display/BitbucketServer/Bitbucket+Server+home+directory
 ENV BITBUCKET_HOME          				/var/atlassian/application-data/bitbucket
 ENV BITBUCKET_INSTALL_DIR   				/opt/atlassian/bitbucket
+ENV ELASTICSEARCH_ENABLED                               true
+ENV APPLICATION_MODE                                    normal
 
 VOLUME ["${BITBUCKET_HOME}"]
 WORKDIR $BITBUCKET_HOME
@@ -17,11 +19,11 @@ WORKDIR $BITBUCKET_HOME
 EXPOSE 7990
 EXPOSE 7999
 
-CMD ["/entrypoint.sh", "-fg"]
+CMD ["/entrypoint.py", "-fg"]
 ENTRYPOINT ["/sbin/tini", "--"]
 
 RUN apt-get update \
-	&& apt-get install -y --no-install-recommends fontconfig git openssh-client perl \
+	&& apt-get install -y --no-install-recommends fontconfig git openssh-client perl python3 python3-jinja2 \
 	&& apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 ARG TINI_VERSION=v0.18.0
@@ -41,4 +43,4 @@ RUN groupadd --gid ${RUN_GID} ${RUN_GROUP} \
     \
     && sed -i -e 's/^# umask/umask/' 		${BITBUCKET_INSTALL_DIR}/bin/_start-webapp.sh
 
-COPY entrypoint.sh             				/entrypoint.sh
+COPY entrypoint.py             				/entrypoint.py
