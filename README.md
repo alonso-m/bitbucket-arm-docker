@@ -190,3 +190,8 @@ Please raise an [issue](https://bitbucket.org/atlassian/docker-atlassian-bitbuck
 # Support
 
 For product support, go to [support.atlassian.com](https://support.atlassian.com/)
+
+# License
+
+Copyright © 2019 Atlassian Corporation Pty Ltd.
+Licensed under the Apache License, Version 2.0.
