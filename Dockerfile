@@ -10,7 +10,7 @@ ENV RUN_GID							2003
 ENV BITBUCKET_HOME          				/var/atlassian/application-data/bitbucket
 ENV BITBUCKET_INSTALL_DIR   				/opt/atlassian/bitbucket
 ENV ELASTICSEARCH_ENABLED                               true
-ENV APPLICATION_MODE                                    normal
+ENV APPLICATION_MODE                                    default
 
 VOLUME ["${BITBUCKET_HOME}"]
 WORKDIR $BITBUCKET_HOME
