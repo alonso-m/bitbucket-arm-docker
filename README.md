@@ -12,9 +12,10 @@ Learn more about Bitbucket Server: <https://www.atlassian.com/software/bitbucket
 This Docker container makes it easy to get an instance of Bitbucket up and
 running.
 
-** We strongly recommend you run this image using a specific version tag instead
-of latest. This is because the image referenced by the latest tag changes often
-and we cannot guarantee that it will be backwards compatible. **
+** If running this image in a production environment, we strongly recommend you
+run this image using a specific version tag instead of latest. This is because
+the image referenced by the latest tag changes often and we cannot guarantee
+that it will be backwards compatible. **
 
 # Quick Start
 
@@ -133,10 +134,11 @@ These correspond to the following settings in
 * `jdbc.user`
 * `jdbc.password`
 
-Other setting you may want to specify are clustering are clustering settings
-(`HAZELCAST_*`) and JMX monitoring (`JMX_*`). A full command-line for a TCP
-clustered instance, with a PostgreSQL database, and an external ElasticSearch
-instance might look like:
+For a full explanation of converting Bitbucket properties into environment
+variables see [the relevant Spring Boot documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-relaxed-binding).
+
+A full command-line for a Bitbucket node with a PostgreSQL database, and an
+external ElasticSearch instance might look like:
 
     $> docker network create --driver bridge --subnet=172.18.0.0/16 myBitbucketNetwork
     $> docker run --network=myBitbucketNetwork --ip=172.18.1.1 \
@@ -146,18 +148,34 @@ instance might look like:
         -e JDBC_PASSWORD=MYPASSWORDSECRET \
         -e JDBC_URL=jdbc:postgresql://my.database.host:5432/bitbucket \
         -e PLUGIN_SEARCH_ELASTICSEARCH_BASEURL=http://my.elasticsearch.host \
-        -e HAZELCAST_NETWORK_TCPIP=true \
-        -e HAZELCAST_NETWORK_TCPIP_MEMBERS=172.18.1.1:5701,172.18.1.2:5701,172.18.1.3:5701 \
-        -e HAZELCAST_GROUP_NAME=bitbucket \
-        -e HAZELCAST_GROUP_PASSWORD=mysecretpassword \
         -v /data/bitbucket-shared:/var/atlassian/application-data/bitbucket/shared \
         --name="bitbucket" \
         -d -p 7990:7990 -p 7999:7999 \
         atlassian/bitbucket-server
 
-For more information on clustering Bitbucket, and other properties see
+### Cluster settings
+
+If running a clustered Bitbucket DC instance, the cluster settings are specified
+with `HAZELCAST_*` environment variables. The main ones to be aware of are:
+
+* `HAZELCAST_PORT` (`hazelcast.port`)
+* `HAZELCAST_GROUP_NAME` (`hazelcast.group.name`)
+* `HAZELCAST_GROUP_PASSWORD` (`hazelcast.group.password`)
+
+Each clustering type (e.g. AWS/Azure/Multicast/TCP) has its own settings. For
+more information on clustering Bitbucket, and other properties see 
 [Clustering with Bitbucket Data Center](https://confluence.atlassian.com/bitbucketserver/clustering-with-bitbucket-data-center-776640164.html)
 and [Clustering with Bitbucket Data Center](https://confluence.atlassian.com/bitbucketserver/bitbucket-server-config-properties-776640155.html).
+
+**NOTE:** The underlying network should be configured to support the clustering
+type you are using. How to do this depends on the container management
+technology, and is beyond the scope of this documentation.
+
+### JMX Monitoring
+
+JMX monitoring can be enabled with `JMX_ENABLED=true`. Information
+on additional settings and available metrics is available in the
+[Bitbucket JMX documentation](https://confluence.atlassian.com/bitbucketserver/enabling-jmx-counters-for-performance-monitoring-776640189.html).
 
 # Shared directory and user IDs
 
@@ -207,18 +225,9 @@ The `latest` tag matches the most recent version of this repository. Thus using
 `atlassian/bitbucket:latest` or `atlassian/bitbucket` will ensure you are
 running the most up to date version of this image.
 
-However, we ** strongly recommend ** that for non-eval workloads you select a
-specific version in order to prevent breaking changes from impacting your setup.
-You can use a specific minor version of Bitbucket Server by using a version
-number tag: `atlassian/bitbucket-server:4.14`. This will install the latest
-`4.14.x` version that is available.
-
-
-# Issue tracker
-
-Please raise an
-[issue](https://bitbucket.org/atlassian/docker-atlassian-bitbucket-server/issues)
-if you encounter any problems with this Dockerfile.
+Alternatively, you can use a specific minor version of Confluence Server by
+using a version number tag: `atlassian/bitbucket-server:6`. This will
+install the latest `6.x.x` version that is available.
 
 # Support
 
