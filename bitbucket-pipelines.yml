@@ -86,6 +86,13 @@ pipelines:
             - export TAG_SUFFIXES='jdk8,ubuntu'
             - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
             - python /usr/src/app/run.py --update
+      - step:
+          name: Update README
+          image: python:3.7-alpine3.9
+          script:
+            - pip install -q requests
+            - export DOCKER_REPO='atlassian/bitbucket-server'
+            - python bin/push-readme.py
   pull-requests:
     '**':
       - step:
