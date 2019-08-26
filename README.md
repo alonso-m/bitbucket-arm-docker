@@ -1,21 +1,34 @@
 ![Atlassian Bitbucket Server](https://www.atlassian.com/dam/wac/legacy/bitbucket_logo_landing.png)
 
-Bitbucket Server is an on-premises source code management solution for Git that's secure, fast, and enterprise grade. Create and manage repositories, set up fine-grained permissions, and collaborate on code - all with the flexibility of your servers.
+Bitbucket Server is an on-premises source code management solution for Git
+that's secure, fast, and enterprise grade. Create and manage repositories, set
+up fine-grained permissions, and collaborate on code - all with the flexibility
+of your servers.
 
 Learn more about Bitbucket Server: <https://www.atlassian.com/software/bitbucket/server>
 
 # Overview
 
-This Docker container makes it easy to get an instance of Bitbucket up and running.
+This Docker container makes it easy to get an instance of Bitbucket up and
+running.
 
-** We strongly recommend you run this image using a specific version tag instead of latest. This is because the image referenced by the latest tag changes often and we cannot guarantee that it will be backwards compatible. **
+** If running this image in a production environment, we strongly recommend you
+run this image using a specific version tag instead of latest. This is because
+the image referenced by the latest tag changes often and we cannot guarantee
+that it will be backwards compatible. **
 
 # Quick Start
 
 For the `BITBUCKET_HOME` directory that is used to store the repository data
-(amongst other things) we recommend mounting a host directory as a [data volume](https://docs.docker.com/engine/tutorials/dockervolumes/#/data-volumes), or via a named volume if using a docker version >= 1.9. 
+(amongst other things) we recommend mounting a host directory as a 
+[data volume](https://docs.docker.com/engine/tutorials/dockervolumes/#/data-volumes),
+or via a named volume if using a docker version >= 1.9.
 
-Volume permission is managed by entry scripts. To get started you can use a data volume, or named volumes. In this example we'll use named volumes.
+Additionally, if running Bitbucket in Data Center mode it is required that a
+shared filesystem is mounted.
+
+Volume permission is managed by entry scripts. To get started you can use a data
+volume, or named volumes. In this example we'll use named volumes.
 
     $> docker volume create --name bitbucketVolume
     $> docker run -v bitbucketVolume:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket-server
@@ -36,11 +49,14 @@ See [Supported Platforms](https://confluence.atlassian.com/display/BitbucketServ
 
 _* Note: If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):7990` instead._
 
-## Reverse Proxy Settings
+## Common settings
 
-If Bitbucket is run behind a reverse proxy server as [described here](https://confluence.atlassian.com/bitbucketserver/proxying-and-securing-bitbucket-server-776640099.html),
-then you need to specify extra options to make Bitbucket aware of the setup. They can be controlled via the below
-environment variables.
+### Reverse Proxy Settings
+
+If Bitbucket is run behind a reverse proxy server as 
+[described here](https://confluence.atlassian.com/bitbucketserver/proxying-and-securing-bitbucket-server-776640099.html),
+then you need to specify extra options to make Bitbucket aware of the
+setup. They can be controlled via the below environment variables.
 
 * `SERVER_PROXY_NAME` (default: NONE)
 
@@ -58,9 +74,10 @@ environment variables.
 
    Set 'true' if SERVER\_SCHEME is 'https'.
 
-## JVM Configuration (Bitbucket Server 5.0 + only)
+### JVM Configuration (Bitbucket Server 5.0 + only)
 
-If you need to override Bitbucket Server's default memory configuration or pass additional JVM arguments, use the environment variables below
+If you need to override Bitbucket Server's default memory configuration or pass
+additional JVM arguments, use the environment variables below
 
 * `JVM_MINIMUM_MEMORY` (default: 512m)
 
@@ -74,80 +91,102 @@ If you need to override Bitbucket Server's default memory configuration or pass 
 
    Additional JVM arguments for Bitbucket Server, such as a custom Java Trust Store
 
-## Application Mode Settings (Bitbucket Server 5.0 + only)
+### Application Mode Settings (Bitbucket Server 5.0 + only)
 
-This docker image can be run as a [Smart Mirror](https://confluence.atlassian.com/bitbucketserver/smart-mirroring-776640046.html) or as part of a [Data Center](https://confluence.atlassian.com/enterprise/bitbucket-data-center-668468332.html) cluster. 
-You can specify the following properties to start Bitbucket as a mirror or as a Data Center node:
+This docker image can be run as a 
+[Smart Mirror](https://confluence.atlassian.com/bitbucketserver/smart-mirroring-776640046.html)
+or as part of a 
+[Data Center](https://confluence.atlassian.com/enterprise/bitbucket-data-center-668468332.html)
+cluster.  You can specify the following properties to start Bitbucket as a
+mirror or as a Data Center node:
 
 * `ELASTICSEARCH_ENABLED` (default: true)
 
-  Set 'false' to prevent Elasticsearch from starting in the container. This should be used if Elasticsearch is running remotely, e.g. for if Bitbucket is running in a Data Center cluster
+  Set 'false' to prevent Elasticsearch from starting in the container. This
+  should be used if Elasticsearch is running remotely, e.g. for if Bitbucket is
+  running in a Data Center cluster
 
 * `APPLICATION_MODE` (default: default)
 
-   The mode Bitbucket will run in. This can be set to 'mirror' to start Bitbucket as a Smart Mirror. This will also disable Elasticsearch even if `ELASTICSEARCH_ENABLED` has not been set to 'false'.
+   The mode Bitbucket will run in. This can be set to 'mirror' to start
+   Bitbucket as a Smart Mirror. This will also disable Elasticsearch even if
+   `ELASTICSEARCH_ENABLED` has not been set to 'false'.
 
-* `HAZELCAST_NETWORK_MULTICAST` (default: false)
+## Other settings
 
-   Data Center: Set 'true' to enable Bitbucket to find new Data Center cluster members via multicast. `HAZELCAST_NETWORK_TCPIP` should not be specified when using this setting.
+As well as the above settings, all settings that are available in the
+[bitbucket.properties
+file](https://confluence.atlassian.com/bitbucketserver/bitbucket-server-config-properties-776640155.html)
+can also be provided via Docker environment variables. For example, to configure
+the database automatically, you would set the following via `--env` (or
+`--env-file`):
 
-* `HAZELCAST_NETWORK_TCPIP` (default: false)
+* `JDBC_DRIVER`
+* `JDBC_URL`
+* `JDBC_USER`
+* `JDBC_PASSWORD`
 
-   Data Center: Set 'true' to enable Bitbucket to find new Data Center cluster members via TCPIP. This setting requires `HAZELCAST_NETWORK_TCPIP_MEMBERS` to be specified. `HAZELCAST_NETWORK_MULTICAST` should not be specified when using this setting.
+These correspond to the following settings in
+[bitbucket.properties](https://confluence.atlassian.com/bitbucketserver/bitbucket-server-config-properties-776640155.html):
 
-* `HAZELCAST_NETWORK_TCPIP_MEMBERS`
+* `jdbc.driver`
+* `jdbc.url`
+* `jdbc.user`
+* `jdbc.password`
 
-   Data Center: List of members that Hazelcast nodes should connect to when HAZELCAST_NETWORK_TCPIP is 'true'
+For a full explanation of converting Bitbucket properties into environment
+variables see [the relevant Spring Boot documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-relaxed-binding).
 
-* `HAZELCAST_GROUP_NAME`
-
-   Data Center: Specifies the cluster group the instance should join.
-
-* `HAZELCAST_GROUP_PASSWORD`
-
-   Data Center: The password required to join the specified cluster group.
-   
-To run Bitbucket as part of a Data Center cluster, create a Docker network and assign the Bitbucket container a static IP. 
-
-Note: Docker networks may support multicast, however the below example shows configuration using TCPIP.
+A full command-line for a Bitbucket node with a PostgreSQL database, and an
+external ElasticSearch instance might look like:
 
     $> docker network create --driver bridge --subnet=172.18.0.0/16 myBitbucketNetwork
-    $> docker run --network=myBitbucketNetwork --ip=172.18.1.1 -e ELASTICSEARCH_ENABLED=false \
-        -e HAZELCAST_NETWORK_TCPIP=true -e HAZELCAST_NETWORK_TCPIP_MEMBERS=172.18.1.1:5701,172.18.1.2:5701,172.18.1.3:5701 \
-        -e HAZELCAST_GROUP_NAME=bitbucket -e HAZELCAST_GROUP_PASSWORD=mysecretpassword \
-        -v /data/bitbucket-shared:/var/atlassian/application-data/bitbucket/shared --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket-server
+    $> docker run --network=myBitbucketNetwork --ip=172.18.1.1 \
+        -e ELASTICSEARCH_ENABLED=false \
+        -e JDBC_DRIVER=org.postgresql.Driver \
+        -e JDBC_USER=atlbitbucket \
+        -e JDBC_PASSWORD=MYPASSWORDSECRET \
+        -e JDBC_URL=jdbc:postgresql://my.database.host:5432/bitbucket \
+        -e PLUGIN_SEARCH_ELASTICSEARCH_BASEURL=http://my.elasticsearch.host \
+        -v /data/bitbucket-shared:/var/atlassian/application-data/bitbucket/shared \
+        --name="bitbucket" \
+        -d -p 7990:7990 -p 7999:7999 \
+        atlassian/bitbucket-server
 
-## JMX Monitoring (Bitbucket Server 5.0 + only)
+### Cluster settings
 
-Bitbucket Server supports detailed JMX monitoring. To enable and configure JMX, use the environment variables below. For further information on JMX configuration, see [Enabling JMX counters for performance monitoring](https://confluence.atlassian.com/bitbucketserver/enabling-jmx-counters-for-performance-monitoring-776640189.html)
+If running a clustered Bitbucket DC instance, the cluster settings are specified
+with `HAZELCAST_*` environment variables. The main ones to be aware of are:
 
-* `JMX_ENABLED` (default: false)
+* `HAZELCAST_PORT` (`hazelcast.port`)
+* `HAZELCAST_GROUP_NAME` (`hazelcast.group.name`)
+* `HAZELCAST_GROUP_PASSWORD` (`hazelcast.group.password`)
 
-   Enable Bitbucket to publish JMX data
+Each clustering type (e.g. AWS/Azure/Multicast/TCP) has its own settings. For
+more information on clustering Bitbucket, and other properties see 
+[Clustering with Bitbucket Data Center](https://confluence.atlassian.com/bitbucketserver/clustering-with-bitbucket-data-center-776640164.html)
+and [Clustering with Bitbucket Data Center](https://confluence.atlassian.com/bitbucketserver/bitbucket-server-config-properties-776640155.html).
 
-* `JMX_REMOTE_AUTH` (default: NONE)
+**NOTE:** The underlying network should be configured to support the clustering
+type you are using. How to do this depends on the container management
+technology, and is beyond the scope of this documentation.
 
-   Set the authentication to use for remote JMX access. This value is required: anything other than "password" or "ssl" will cause remote JMX access to be disabled
+### JMX Monitoring
 
-* `JMX_REMOTE_PORT` (default: 3333)
+JMX monitoring can be enabled with `JMX_ENABLED=true`. Information
+on additional settings and available metrics is available in the
+[Bitbucket JMX documentation](https://confluence.atlassian.com/bitbucketserver/enabling-jmx-counters-for-performance-monitoring-776640189.html).
 
-   The port used to negotiate a JMX connection. Note: this port is only used during the initial authorization, after which a different RMI port used for data transfer
+# Shared directory and user IDs
 
-* `JMX_REMOTE_RMI_PORT` (default: <random>)
+By default the Bitbucket application runs as the user `bitbucket`, with a UID
+and GID of 2003. Consequently this UID must have write access to the shared
+filesystem. If for some reason a different UID must be used, there are a number
+of options available:
 
-   The port used for all subsequent JMX-RMI data transfer. If desired, the RMI data port can be set to the same value as `JMX_REMOTE_PORT` to allow a single port to be used for both JMX authorization and data transfer
-
-* `RMI_SERVER_HOSTNAME` (default: NONE)
-
-   The hostname or IP address that clients will use to connect to the application for JMX monitoring. This must be resolvable by both clients and from the JVM host machine.
-
-* `JMX_PASSWORD_FILE` (default: NONE)
-
-   The full path to the JMX username/password file used to authenticate remote JMX clients. This is required when `JMX_REMOTE_AUTH` is set to "password"
-
-    $> docker run -e JMX_ENABLED=true -e JMX_REMOTE_AUTH=password -e JMX_REMOTE_RMI_PORT=3333 -e RMI_SERVER_HOSTNAME=bitbucket \
-        -e JMX_PASSWORD_FILE=/data/bitbucket:/var/atlassian/application-data/bitbucket/jmx.access \
-        -v /data/bitbucket:/var/atlassian/application-data/bitbucket --name="bitbucket" -d -p 7990:7990 -p 7999:7999 -p 3333:3333 atlassian/bitbucket-server
+* The Docker image can be rebuilt with a different UID.
+* Under Linux, the UID can be remapped using 
+  [user namespace remapping](https://docs.docker.com/engine/security/userns-remap/).
 
 # Upgrade
 
@@ -167,26 +206,34 @@ container and its volumes using the `-v` option._
 
 # Backup
 
-For evaluations you can use the built-in database that will store its files in the Bitbucket Server home directory. In that case it is sufficient to create a backup archive of the directory on the host that is used as a volume (`/data/bitbucket` in the example above).
+For evaluations you can use the built-in database that will store its files in
+the Bitbucket Server home directory. In that case it is sufficient to create a
+backup archive of the directory on the host that is used as a volume
+(`/data/bitbucket` in the example above).
 
-The [Bitbucket Server Backup Client](https://confluence.atlassian.com/display/BitbucketServer/Data+recovery+and+backups) is currently not supported in the Docker setup. You can however use the [Bitbucket Server DIY Backup](https://confluence.atlassian.com/display/BitbucketServer/Using+Bitbucket+Server+DIY+Backup) approach in case you decided to use an external database.
+The [Bitbucket Server Backup Client](https://confluence.atlassian.com/display/BitbucketServer/Data+recovery+and+backups)
+is currently not supported in the Docker setup. You can however use the
+[Bitbucket Server DIY Backup](https://confluence.atlassian.com/display/BitbucketServer/Using+Bitbucket+Server+DIY+Backup)
+approach in case you decided to use an external database.
 
-Read more about data recovery and backups: [https://confluence.atlassian.com/display/BitbucketServer/Data+recovery+and+backups](https://confluence.atlassian.com/display/BitbucketServer/Data+recovery+and+backups)
+Read more about data recovery and backups:
+[https://confluence.atlassian.com/display/BitbucketServer/Data+recovery+and+backups](https://confluence.atlassian.com/display/BitbucketServer/Data+recovery+and+backups)
 
 # Versioning
 
-The `latest` tag matches the most recent version of this repository. Thus using `atlassian/bitbucket:latest` or `atlassian/bitbucket` will ensure you are running the most up to date version of this image.
+The `latest` tag matches the most recent version of this repository. Thus using
+`atlassian/bitbucket:latest` or `atlassian/bitbucket` will ensure you are
+running the most up to date version of this image.
 
-However,  we ** strongly recommend ** that for non-eval workloads you select a specific version in order to prevent breaking changes from impacting your setup.
-You can use a specific minor version of Bitbucket Server by using a version number
-tag: `atlassian/bitbucket-server:4.14`. This will install the latest `4.14.x` version that
-is available.
-
-
-# Issue tracker
-
-Please raise an [issue](https://bitbucket.org/atlassian/docker-atlassian-bitbucket-server/issues) if you encounter any problems with this Dockerfile.
+Alternatively, you can use a specific minor version of Confluence Server by
+using a version number tag: `atlassian/bitbucket-server:6`. This will
+install the latest `6.x.x` version that is available.
 
 # Support
 
 For product support, go to [support.atlassian.com](https://support.atlassian.com/)
+
+# License
+
+Copyright © 2019 Atlassian Corporation Pty Ltd.
+Licensed under the Apache License, Version 2.0.
