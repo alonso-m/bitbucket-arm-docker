@@ -15,8 +15,8 @@ BB_MAIN_CLASS = 'com.atlassian.bitbucket.internal.launcher.BitbucketServerLaunch
 
 # Run an image and wrap it in a TestInfra host for convenience.
 # FIXME: There's probably a way to turn this into a fixture with parameters.
-def run_image(docker_cli, image, environment={}, ports={}):
-    container = docker_cli.containers.run(image, environment=environment, ports=ports, detach=True)
+def run_image(docker_cli, image, **kwargs):
+    container = docker_cli.containers.run(image, detach=True, **kwargs)
     return testinfra.get_host("docker://"+container.id)
 
 # TestInfra's process command doesn't seem to work for arg matching
@@ -114,3 +114,10 @@ def test_home_permissions(docker_cli, image):
 
     assert container.file(f'{BB_HOME}').user == 'bitbucket'
 
+def test_elasticsearch_non_root(docker_cli, image):
+    RUN_UID = 2003
+    RUN_GID = 2003
+    environment = {'ELASTICSEARCH_ENABLED': 'false'}
+    container = run_image(docker_cli, image, user=f'{RUN_UID}:{RUN_GID}', environment=environment)
+    jvm = wait_for_proc(container, BB_MAIN_CLASS)
+    assert '--no-search' not in jvm

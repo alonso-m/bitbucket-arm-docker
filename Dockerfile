@@ -12,7 +12,6 @@ ENV BITBUCKET_INSTALL_DIR   				/opt/atlassian/bitbucket
 ENV ELASTICSEARCH_ENABLED                               true
 ENV APPLICATION_MODE                                    default
 
-VOLUME ["${BITBUCKET_HOME}"]
 WORKDIR $BITBUCKET_HOME
 
 # Expose HTTP and SSH ports
@@ -40,7 +39,10 @@ RUN groupadd --gid ${RUN_GID} ${RUN_GROUP} \
     && curl -L --silent                  	${DOWNLOAD_URL} | tar -xz --strip-components=1 -C "${BITBUCKET_INSTALL_DIR}" \
     && chmod -R "u=rwX,g=rX,o=rX"               ${BITBUCKET_INSTALL_DIR}/ \
     && chown -R root.                           ${BITBUCKET_INSTALL_DIR}/ \
+    && chown -R ${RUN_USER}:${RUN_GROUP}        ${BITBUCKET_HOME} \
     \
     && sed -i -e 's/^# umask/umask/' 		${BITBUCKET_INSTALL_DIR}/bin/_start-webapp.sh
+
+VOLUME ["${BITBUCKET_HOME}"]
 
 COPY entrypoint.py             				/entrypoint.py
