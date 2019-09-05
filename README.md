@@ -112,33 +112,36 @@ mirror or as a Data Center node:
    Bitbucket as a Smart Mirror. This will also disable Elasticsearch even if
    `ELASTICSEARCH_ENABLED` has not been set to 'false'.
 
-## Other settings
+### Database Configuration
 
-As well as the above settings, all settings that are available in the
-[bitbucket.properties
-file](https://confluence.atlassian.com/bitbucketserver/bitbucket-server-config-properties-776640155.html)
-can also be provided via Docker environment variables. For example, to configure
-the database automatically, you would set the following via `--env` (or
-`--env-file`):
+To configure the database automatically on first run, you can provide the
+following settings:
 
 * `JDBC_DRIVER`
 * `JDBC_URL`
 * `JDBC_USER`
 * `JDBC_PASSWORD`
 
-These correspond to the following settings in
-[bitbucket.properties](https://confluence.atlassian.com/bitbucketserver/bitbucket-server-config-properties-776640155.html):
+Note: Due to licensing restrictions Bitbucket does not ship with a MySQL or
+Oracle JDBC drivers. To use these databases you will need to copy a suitable
+driver into the container and restart it. For example, to copy the MySQL driver
+into a container named "bitbucket", you would do the following:
 
-* `jdbc.driver`
-* `jdbc.url`
-* `jdbc.user`
-* `jdbc.password`
+    docker cp mysql-connector-java.x.y.z.jar bitbucket:/opt/atlassian/bitbucket/lib
+    docker restart bitbucket
 
-For a full explanation of converting Bitbucket properties into environment
-variables see [the relevant Spring Boot documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-relaxed-binding).
+For more information see [Connecting Bitbucket Server to an external database](https://confluence.atlassian.com/bitbucketserver/connecting-bitbucket-server-to-an-external-database-776640378.html).
 
-A full command-line for a Bitbucket node with a PostgreSQL database, and an
-external ElasticSearch instance might look like:
+## Other settings
+
+As well as the above settings, all settings that are available in the
+[bitbucket.properties file](https://confluence.atlassian.com/bitbucketserver/bitbucket-server-config-properties-776640155.html)
+can also be provided via Docker environment variables. For a full explanation of converting Bitbucket properties into environment
+variables see
+[the relevant Spring Boot documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-relaxed-binding).
+
+For example, a full command-line for a Bitbucket node with a PostgreSQL
+database, and an external ElasticSearch instance might look like:
 
     $> docker network create --driver bridge --subnet=172.18.0.0/16 myBitbucketNetwork
     $> docker run --network=myBitbucketNetwork --ip=172.18.1.1 \
