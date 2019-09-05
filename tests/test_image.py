@@ -114,7 +114,6 @@ def test_home_permissions(docker_cli, image):
 
     assert container.file(f'{BB_HOME}').user == 'bitbucket'
 
-
 def test_elasticsearch_non_root(docker_cli, image):
     RUN_UID = 2003
     RUN_GID = 2003

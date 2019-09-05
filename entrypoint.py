@@ -43,8 +43,9 @@ if os.getuid() == 0:
     start_cmd = ' '.join([start_cmd] + sys.argv[1:])
     args = [cmd, env['run_user'], '-c', start_cmd]
 else:
-    cmd = start_cmd
-    args = [start_cmd] + sys.argv[1:]
+    start_cmd = start_cmd.split()
+    cmd = start_cmd[0]
+    args = start_cmd[1:] + sys.argv[1:]
 
 logging.info(f"Running Bitbucket with command '{cmd}', arguments {args}")
 os.execv(cmd, args)
