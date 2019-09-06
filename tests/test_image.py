@@ -121,3 +121,9 @@ def test_elasticsearch_non_root(docker_cli, image):
     container = run_image(docker_cli, image, user=f'{RUN_UID}:{RUN_GID}', environment=environment)
     jvm = wait_for_proc(container, BB_MAIN_CLASS)
     assert '--no-search' not in jvm
+
+def test_java_in_run_user_path(docker_cli, image):
+    RUN_USER = 'bitbucket'
+    container = run_image(docker_cli, image)
+    proc = container.run(f'su -c "which java" {RUN_USER}')
+    assert len(proc.stdout) > 0
