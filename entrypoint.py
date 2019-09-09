@@ -13,8 +13,12 @@ import jinja2 as j2
 logging.basicConfig(level=logging.DEBUG)
 
 def set_perms(path, user, group, mode):
-    shutil.chown(path, user=user, group=group)
-    os.chmod(path, mode)
+    for dirpath, dirnames, filenames in os.walk(path):
+        shutil.chown(dirpath, user=user, group=group)
+        os.chmod(dirpath, mode)
+        for filename in filenames:
+            shutil.chown(os.path.join(dirpath, filename), user=user, group=group)
+            os.chmod(os.path.join(dirpath, filename), mode)
 
 
 ######################################################################
