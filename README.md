@@ -228,7 +228,7 @@ The `latest` tag matches the most recent version of this repository. Thus using
 `atlassian/bitbucket:latest` or `atlassian/bitbucket` will ensure you are
 running the most up to date version of this image.
 
-Alternatively, you can use a specific minor version of Confluence Server by
+Alternatively, you can use a specific minor version of Bitbucket Server by
 using a version number tag: `atlassian/bitbucket-server:6`. This will
 install the latest `6.x.x` version that is available.
 
