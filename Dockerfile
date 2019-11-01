@@ -1,6 +1,9 @@
 ARG BASE_IMAGE=adoptopenjdk/openjdk8:slim
 FROM $BASE_IMAGE
 
+ARG BITBUCKET_VERSION
+
+
 ENV RUN_USER                                        bitbucket
 ENV RUN_GROUP                                       bitbucket
 ENV RUN_UID                                         2003
@@ -22,14 +25,16 @@ CMD ["/entrypoint.py", "-fg"]
 ENTRYPOINT ["/sbin/tini", "--"]
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends fontconfig git openssh-client perl python3 python3-jinja2 \
+    && apt-get install -y --no-install-recommends fontconfig openssh-client perl python3 python3-jinja2 \
     && apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+
+COPY bin/make-git.sh                                /
+RUN /make-git.sh
 
 ARG TINI_VERSION=v0.18.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /sbin/tini
 RUN chmod +x /sbin/tini
 
-ARG BITBUCKET_VERSION
 ARG DOWNLOAD_URL=https://product-downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-${BITBUCKET_VERSION}.tar.gz
 
 RUN groupadd --gid ${RUN_GID} ${RUN_GROUP} \
