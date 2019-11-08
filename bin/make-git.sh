@@ -33,8 +33,11 @@ case ${BITBUCKET_MINOR_VERSION} in
     6.7)
         SUPPORTED_GIT_VERSION="2.23"
         ;;
+    6.8)
+        SUPPORTED_GIT_VERSION="2.24"
+        ;;
     *)
-        SUPPORTED_GIT_VERSION="2.23"
+        SUPPORTED_GIT_VERSION="2.24"
         ;;
 esac
 
@@ -46,7 +49,7 @@ echo "Installing git build dependencies"
 apt-get update
 apt-get install -y --no-install-recommends git dh-autoreconf libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev
 
-# Clone and checkout specific git version
+# Clone and checkout latest supported git version
 git clone git://git.kernel.org/pub/scm/git/git.git ${SOURCE_DIR}
 cd ${SOURCE_DIR}
 GIT_VERSION=$(git tag | grep "^v${SUPPORTED_GIT_VERSION}\.[0-9]\+$" | sort | tail -n 1)
@@ -61,19 +64,8 @@ make configure
 ./configure --prefix=${DIST_DIR}
 make install
 
-# Symlink redundant files to reduce image size
-cd ${DIST_DIR}/libexec/git-core
-for i in $(ls | grep -v "^git$"); do
-    diff git $i
-    if [ $? -eq 0 ]; then
-        ln -sf $PWD/git $PWD/$i
-    fi
-done
-
-# Remove build dir
-rm -rf ${SOURCE_DIR}
-
 # Remove and clean up dependencies
+rm -rf ${SOURCE_DIR}
 apt-get purge -y dh-autoreconf libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev
 apt-get clean autoclean
 apt-get autoremove -y
