@@ -47,14 +47,14 @@ mkdir -p ${DIST_DIR}
 # Install build dependencies
 echo "Installing git build dependencies"
 apt-get update
-apt-get install -y --no-install-recommends git dh-autoreconf libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev
+apt-get install -y --no-install-recommends git dh-autoreconf libcurl4-gnutls-dev libexpat1-dev libz-dev libssl-dev
 
-# Clone and checkout latest supported git version
-git clone git://git.kernel.org/pub/scm/git/git.git ${SOURCE_DIR}
-cd ${SOURCE_DIR}
-GIT_VERSION=$(git tag | grep "^v${SUPPORTED_GIT_VERSION}\.[0-9]\+$" | sort | tail -n 1)
-echo "Checking out ${GIT_VERSION}"
-git checkout "${GIT_VERSION}"
+# cut -c53- here drops the SHA (40), tab (1) and "refs/tags/v" (11), because some things, like the
+# snapshot URL and tarball root directory, don't have the leading "v" from the tag in them
+# Thanks to Bryan Turner for this improved method of retrieving the appropriate git version
+GIT_VERSION=$(git ls-remote git://git.kernel.org/pub/scm/git/git.git | cut -c53- | grep "^${SUPPORTED_GIT_VERSION}\.[0-9\.]\+$" | sort -V | tail -n 1)
+curl -s -o - "https://git.kernel.org/pub/scm/git/git.git/snapshot/git-${GIT_VERSION}.tar.gz" | tar -xz --strip-components=1 --one-top-level="${SOURCE_DIR}"
+cd "${SOURCE_DIR}"
 
 # Uninstall pkg git
 apt-get purge -y git
@@ -62,11 +62,12 @@ apt-get purge -y git
 # Install git from source
 make configure
 ./configure --prefix=${DIST_DIR}
-make install
+make NO_TCLTK=1 NO_GETTEXT=1 install
 
 # Remove and clean up dependencies
+cd /
 rm -rf ${SOURCE_DIR}
-apt-get purge -y dh-autoreconf libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev
+apt-get purge -y dh-autoreconf
 apt-get clean autoclean
 apt-get autoremove -y
 rm -rf /var/lib/apt/lists/*
