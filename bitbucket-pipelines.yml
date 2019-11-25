@@ -8,10 +8,11 @@ pipelines:
           services:
             - docker
           script:
+            - git submodule update --init --recursive
             - export BASE_VERSION='6'
             - export DEFAULT_RELEASE='false'
             - export DOCKER_REPO='atlassian/bitbucket-server'
-            - export DOCKERFILE_BUILDARGS='BASE_IMAGE=adoptopenjdk/openjdk11:slim'
+            - export DOCKERFILE_BUILDARGS='BASE_IMAGE=adoptopenjdk:11-hotspot'
             - export DOCKERFILE_VERSION_ARG='BITBUCKET_VERSION'
             - export MAC_PRODUCT_KEY='bitbucket'
             - export TAG_SUFFIXES='jdk11,ubuntu-jdk11'
@@ -22,6 +23,7 @@ pipelines:
           services:
             - docker
           script:
+            - git submodule update --init --recursive
             - export BASE_VERSION='6'
             - export DEFAULT_RELEASE='true'
             - export DOCKER_REPO='atlassian/bitbucket-server'
@@ -38,6 +40,7 @@ pipelines:
           services:
             - docker
           script:
+            - git submodule update --init --recursive
             - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
             - >
               docker build -t atlassian/bitbucket-server:${DOCKER_TAG}
@@ -51,10 +54,11 @@ pipelines:
           services:
             - docker
           script:
+            - git submodule update --init --recursive
             - echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
             - >
               docker build -t atlassian/bitbucket-server:${DOCKER_TAG}
-              --build-arg BASE_IMAGE=adoptopenjdk/openjdk11:slim
+              --build-arg BASE_IMAGE=adoptopenjdk:11-hotspot
               --build-arg BITBUCKET_VERSION=${BITBUCKET_VERSION} .
             - docker push atlassian/bitbucket-server:${DOCKER_TAG}
   branches:
@@ -64,10 +68,11 @@ pipelines:
           services:
             - docker
           script:
+            - git submodule update --init --recursive
             - export BASE_VERSION='6'
             - export DEFAULT_RELEASE='false'
             - export DOCKER_REPO='atlassian/bitbucket-server'
-            - export DOCKERFILE_BUILDARGS='BASE_IMAGE=adoptopenjdk/openjdk11:slim'
+            - export DOCKERFILE_BUILDARGS='BASE_IMAGE=adoptopenjdk:11-hotspot'
             - export DOCKERFILE_VERSION_ARG='BITBUCKET_VERSION'
             - export MAC_PRODUCT_KEY='bitbucket'
             - export TAG_SUFFIXES='jdk11,ubuntu-jdk11'
@@ -78,6 +83,7 @@ pipelines:
           services:
             - docker
           script:
+            - git submodule update --init --recursive
             - export BASE_VERSION='6'
             - export DEFAULT_RELEASE='true'
             - export DOCKER_REPO='atlassian/bitbucket-server'
@@ -90,9 +96,11 @@ pipelines:
           name: Update README
           image: python:3.7-alpine3.9
           script:
+            - apk add --no-cache git
+            - git submodule update --init --recursive
             - pip install -q requests
             - export DOCKER_REPO='atlassian/bitbucket-server'
-            - python bin/push-readme.py
+            - python shared-components/image/push-readme.py
   pull-requests:
     '**':
       - step:
@@ -100,8 +108,18 @@ pipelines:
           services:
             - docker
           script:
-            - pip install -q -r tests/test-requirements.txt
+            - apk add --no-cache git
+            - git submodule update --init --recursive
+            - pip install -q -r shared-components/tests/requirements.txt
+            - export PYTHONPATH=./shared-components/tests:$PYTHONPATH
+            - export DOCKERFILE='Dockerfile'
+            - export DOCKERFILE_VERSION_ARG='BITBUCKET_VERSION'
+            - export MAC_PRODUCT_KEY='bitbucket'
             - py.test tests/
+            - py.test shared-components/tests/
+            - export DOCKERFILE_BUILDARGS='BASE_IMAGE=adoptopenjdk:11-hotspot'
+            - py.test tests/
+            - py.test shared-components/tests/
 definitions:
   services:
     docker:
