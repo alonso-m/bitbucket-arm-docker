@@ -180,6 +180,13 @@ JMX monitoring can be enabled with `JMX_ENABLED=true`. Information
 on additional settings and available metrics is available in the
 [Bitbucket JMX documentation](https://confluence.atlassian.com/bitbucketserver/enabling-jmx-counters-for-performance-monitoring-776640189.html).
 
+## Container Configuration
+
+* `SET_PERMISSIONS` (default: true)
+
+   Define whether to set home directory permissions on startup. Set to `false` to disable
+   this behaviour.
+
 # Shared directory and user IDs
 
 By default the Bitbucket application runs as the user `bitbucket`, with a UID
@@ -190,14 +197,6 @@ of options available:
 * The Docker image can be rebuilt with a different UID.
 * Under Linux, the UID can be remapped using
   [user namespace remapping](https://docs.docker.com/engine/security/userns-remap/).
-
-
-## Container Configuration
-
-* `SET_PERMISSIONS` (default: true)
-
-   Define whether to set home directory permissions on startup. Set to `false` to disable
-   this behaviour.
 
 # Upgrade
 
