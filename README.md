@@ -20,7 +20,7 @@ that it will be backwards compatible. **
 # Quick Start
 
 For the `BITBUCKET_HOME` directory that is used to store the repository data
-(amongst other things) we recommend mounting a host directory as a 
+(amongst other things) we recommend mounting a host directory as a
 [data volume](https://docs.docker.com/engine/tutorials/dockervolumes/#/data-volumes),
 or via a named volume if using a docker version >= 1.9.
 
@@ -45,7 +45,7 @@ Please ensure your container has the necessary resources allocated to it.
 We recommend 2GiB of memory allocated to accommodate both the application server
 and the git processes.
 See [Supported Platforms](https://confluence.atlassian.com/display/BitbucketServer/Supported+platforms) for further information.
-    
+
 
 _* Note: If you are using `docker-machine` on Mac OS X, please use `open http://$(docker-machine ip default):7990` instead._
 
@@ -53,7 +53,7 @@ _* Note: If you are using `docker-machine` on Mac OS X, please use `open http://
 
 ### Reverse Proxy Settings
 
-If Bitbucket is run behind a reverse proxy server as 
+If Bitbucket is run behind a reverse proxy server as
 [described here](https://confluence.atlassian.com/bitbucketserver/proxying-and-securing-bitbucket-server-776640099.html),
 then you need to specify extra options to make Bitbucket aware of the
 setup. They can be controlled via the below environment variables.
@@ -93,9 +93,9 @@ additional JVM arguments, use the environment variables below
 
 ### Application Mode Settings (Bitbucket Server 5.0 + only)
 
-This docker image can be run as a 
+This docker image can be run as a
 [Smart Mirror](https://confluence.atlassian.com/bitbucketserver/smart-mirroring-776640046.html)
-or as part of a 
+or as part of a
 [Data Center](https://confluence.atlassian.com/enterprise/bitbucket-data-center-668468332.html)
 cluster.  You can specify the following properties to start Bitbucket as a
 mirror or as a Data Center node:
@@ -166,7 +166,7 @@ with `HAZELCAST_*` environment variables. The main ones to be aware of are:
 * `HAZELCAST_GROUP_PASSWORD` (`hazelcast.group.password`)
 
 Each clustering type (e.g. AWS/Azure/Multicast/TCP) has its own settings. For
-more information on clustering Bitbucket, and other properties see 
+more information on clustering Bitbucket, and other properties see
 [Clustering with Bitbucket Data Center](https://confluence.atlassian.com/bitbucketserver/clustering-with-bitbucket-data-center-776640164.html)
 and [Clustering with Bitbucket Data Center](https://confluence.atlassian.com/bitbucketserver/bitbucket-server-config-properties-776640155.html).
 
@@ -188,8 +188,16 @@ filesystem. If for some reason a different UID must be used, there are a number
 of options available:
 
 * The Docker image can be rebuilt with a different UID.
-* Under Linux, the UID can be remapped using 
+* Under Linux, the UID can be remapped using
   [user namespace remapping](https://docs.docker.com/engine/security/userns-remap/).
+
+
+## Container Configuration
+
+* `SET_PERMISSIONS` (default: true)
+
+   Define whether to set home directory permissions on startup. Set to `false` to disable
+   this behaviour.
 
 # Upgrade
 
@@ -231,6 +239,46 @@ running the most up to date version of this image.
 Alternatively, you can use a specific minor version of Bitbucket Server by
 using a version number tag: `atlassian/bitbucket-server:6`. This will
 install the latest `6.x.x` version that is available.
+
+# Troubleshooting
+
+These images include built-in scripts to assist in performing common JVM diagnostic tasks.
+
+## Thread dumps
+
+`/opt/atlassian/support/thread-dumps.sh` can be run via `docker exec` to easily trigger the collection of thread
+dumps from the containerized application. For example:
+
+    docker exec my_container /opt/atlassian/support/thread-dumps.sh
+
+By default this script will collect 10 thread dumps at 5 second intervals. This can
+be overridden by passing a custom value for the count and interval, by using `-c` / `--count`
+and `-i` / `--interval` respectively. For example, to collect 20 thread dumps at 3 second intervals:
+
+    docker exec my_container /opt/atlassian/support/thread-dumps.sh --count 20 --interval 3
+
+Thread dumps will be written to `$APP_HOME/thread_dumps/<date>`.
+
+Note: By default this script will also capture output from top run in 'Thread-mode'. This can
+be disabled by passing `-n` / `--no-top`
+
+## Heap dump
+
+`/opt/atlassian/support/heap-dump.sh` can be run via `docker exec` to easily trigger the collection of a heap
+dump from the containerized application. For example:
+
+    docker exec my_container /opt/atlassian/support/heap-dump.sh
+
+A heap dump will be written to `$APP_HOME/heap.bin`. If a file already exists at this
+location, use `-f` / `--force` to overwrite the existing heap dump file.
+
+## Manual diagnostics
+
+The `jcmd` utility is also included in these images and can be used by starting a `bash` shell
+in the running container:
+
+    docker exec -it my_container /bin/bash
+
 
 # Support
 
