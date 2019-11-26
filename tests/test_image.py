@@ -82,3 +82,8 @@ def test_java_in_run_user_path(docker_cli, image):
     container = run_image(docker_cli, image)
     proc = container.run(f'su -c "which java" {RUN_USER}')
     assert len(proc.stdout) > 0
+
+
+def test_git(docker_cli, image, run_user):
+    container = run_image(docker_cli, image, user=run_user)
+    container.run_test('git --version')
