@@ -1,6 +1,7 @@
 ARG BASE_IMAGE=adoptopenjdk/openjdk8:slim
 FROM $BASE_IMAGE
 
+ARG PLATFORM=amd64
 ARG BITBUCKET_VERSION
 
 
@@ -32,7 +33,7 @@ COPY bin/make-git.sh                                /
 RUN /make-git.sh
 
 ARG TINI_VERSION=v0.18.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /sbin/tini
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-${PLATFORM} /sbin/tini
 RUN chmod +x /sbin/tini
 
 ARG DOWNLOAD_URL=https://product-downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-${BITBUCKET_VERSION}.tar.gz
