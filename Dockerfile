@@ -21,7 +21,7 @@ WORKDIR $BITBUCKET_HOME
 EXPOSE 7990
 EXPOSE 7999
 
-CMD ["/entrypoint.py", "-fg"]
+CMD ["/entrypoint.py"]
 ENTRYPOINT ["/sbin/tini", "--"]
 
 RUN apt-get update \
