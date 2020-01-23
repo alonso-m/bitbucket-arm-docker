@@ -10,7 +10,8 @@ pipelines:
                 - docker
               script:
                 - git submodule update --init --recursive
-                - export BASE_VERSION='6'
+                - export START_VERSION='6'
+                - export END_VERSION='8'
                 - export DEFAULT_RELEASE='false'
                 - export DOCKER_REPO='atlassian/bitbucket-server'
                 - export DOCKERFILE_BUILDARGS='BASE_IMAGE=adoptopenjdk:11-hotspot'
@@ -25,7 +26,8 @@ pipelines:
                 - docker
               script:
                 - git submodule update --init --recursive
-                - export BASE_VERSION='6'
+                - export START_VERSION='6'
+                - export END_VERSION='8'
                 - export DEFAULT_RELEASE='true'
                 - export DOCKER_REPO='atlassian/bitbucket-server'
                 - export DOCKERFILE_VERSION_ARG='BITBUCKET_VERSION'
@@ -71,7 +73,8 @@ pipelines:
                 - docker
               script:
                 - git submodule update --init --recursive
-                - export BASE_VERSION='6'
+                - export START_VERSION='6'
+                - export END_VERSION='8'
                 - export DEFAULT_RELEASE='false'
                 - export DOCKER_REPO='atlassian/bitbucket-server'
                 - export DOCKERFILE_BUILDARGS='BASE_IMAGE=adoptopenjdk:11-hotspot'
@@ -86,7 +89,8 @@ pipelines:
                 - docker
               script:
                 - git submodule update --init --recursive
-                - export BASE_VERSION='6'
+                - export START_VERSION='6'
+                - export END_VERSION='8'
                 - export DEFAULT_RELEASE='true'
                 - export DOCKER_REPO='atlassian/bitbucket-server'
                 - export DOCKERFILE_VERSION_ARG='BITBUCKET_VERSION'
