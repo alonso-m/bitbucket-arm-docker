@@ -1,7 +1,7 @@
-ARG BASE_IMAGE=adoptopenjdk/openjdk8:slim
+ARG BASE_IMAGE=arm32v7/adoptopenjdk:8-jdk-hotspot
 FROM $BASE_IMAGE
 
-ARG PLATFORM=amd64
+ARG PLATFORM=armhf
 ARG BITBUCKET_VERSION
 
 
