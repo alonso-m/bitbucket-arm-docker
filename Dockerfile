@@ -1,8 +1,8 @@
-ARG BASE_IMAGE=arm32v7/adoptopenjdk:8-jdk-hotspot
+ARG BASE_IMAGE=arm64v8/openjdk:11-jdk
 FROM $BASE_IMAGE
 
-ARG PLATFORM=armhf
-ARG BITBUCKET_VERSION
+ARG PLATFORM=arm64
+ARG BITBUCKET_VERSION=7.0.0
 
 
 ENV RUN_USER                                        bitbucket
