@@ -1,0 +1,54 @@
+image: atlassian/default-image:2
+
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Auto create PRs
+          script:
+            - >
+              export ACCESS_TOKEN=$(curl "https://bitbucket.org/site/oauth2/access_token" \
+                  --silent \
+                  --request POST \
+                  --user "${DOCKER_BOT_CLIENT_ID}:${DOCKER_BOT_CLIENT_SECRET}" \
+                  --data 'grant_type=client_credentials' \
+                  --data 'scopes=repository' | jq --raw-output '.access_token')
+            - >
+              function update_shared_components() {
+                  local REPO="$1"
+                  local REVIEWERS=$(curl "https://api.bitbucket.org/2.0/repositories/${REPO}/default-reviewers" \
+                      --silent \
+                      --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+                      --header "Content-Type: application/json" | jq --raw-output '.values')
+                  git clone "https://x-token-auth:${ACCESS_TOKEN}@bitbucket.org/${REPO}" ~/${REPO}
+                  cd ~/${REPO}
+                  git checkout -B update-shared-components
+                  git submodule update --init --recursive
+                  git submodule update --recursive --remote
+                  git add .
+                  git -c "user.name=Atlassian Docker Bot" -c "user.email=$DOCKER_BOT_EMAIL" commit -m "Update shared components"
+                  if [[ $(git ls-remote --heads origin update-shared-components) ]]; then
+                      local GIT_OPTS="--force-with-lease"
+                  fi
+                  git push ${GIT_OPTS} origin update-shared-components
+                  local PR_DATA='{
+                      "title": "Update shared components",
+                      "close_source_branch": true,
+                      "source": {
+                          "branch": {
+                              "name": "update-shared-components"
+                          }
+                      },
+                      "reviewers": '${REVIEWERS}'
+                  }'
+                  curl "https://api.bitbucket.org/2.0/repositories/${REPO}/pullrequests" \
+                      --globoff \
+                      --request POST \
+                      --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+                      --header "Content-Type: application/json" \
+                      --data "${PR_DATA}"
+              }
+            - update_shared_components atlassian-docker/docker-atlassian-bitbucket-server
+            - update_shared_components atlassian-docker/docker-atlassian-confluence-server
+            - update_shared_components atlassian-docker/docker-atlassian-jira
+            - update_shared_components atlassian-docker/docker-atlassian-crowd
