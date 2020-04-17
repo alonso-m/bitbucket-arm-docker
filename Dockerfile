@@ -1,7 +1,7 @@
 ARG BASE_IMAGE=adoptopenjdk/openjdk8:slim
 FROM $BASE_IMAGE
 
-ARG BITBUCKET_VERSION=6.10.1
+ARG BITBUCKET_VERSION=7.1.1
 
 
 ENV RUN_USER                                        bitbucket
