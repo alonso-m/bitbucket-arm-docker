@@ -1,8 +1,6 @@
-![Atlassian Bitbucket Server](https://wac-cdn.atlassian.com/dam/jcr:bf39fc40-3871-491f-98e3-fb2293f57a00/bitbucket-icon-gradient-blue.svg?cdnVersion=696)
+# bitbucket-server-arm-docker
 
-This is a fork of the original Atlassian Bitbucket server docker image modified to work on ARM architecture.
-
-The original fork is here: https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/src/master/
+This is a fork of the original Atlassian Bitbucket server docker image modified to work on ARM architecture. The original repository can be found here: https://bitbucket.org/atlassian-docker/docker-atlassian-bitbucket-server/src/master/
 
 This repository consists of two branches: arm64v8 and arm32v7
 
