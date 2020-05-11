@@ -1,8 +1,8 @@
-ARG BASE_IMAGE=arm64v8/openjdk:11-jdk
+ARG BASE_IMAGE=arm32v7/openjdk:11-jdk
 FROM $BASE_IMAGE
 
 ARG BITBUCKET_VERSION=7.2.1
-ARG PLATFORM=arm64
+ARG PLATFORM=armhf
 
 ENV RUN_USER                                        bitbucket
 ENV RUN_GROUP                                       bitbucket
