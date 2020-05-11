@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=arm32v7/openjdk:11-jdk
+ARG BASE_IMAGE=arm32v7/adoptopenjdk:11-jdk-hotspot-bionic
 FROM $BASE_IMAGE
 
 ARG BITBUCKET_VERSION=7.2.1
