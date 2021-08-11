@@ -1,7 +1,7 @@
 ARG BASE_IMAGE=arm64v8/adoptopenjdk:11-jdk-hotspot
 FROM $BASE_IMAGE
 
-ARG BITBUCKET_VERSION=7.15.0
+ARG BITBUCKET_VERSION=7.15.1
 ARG PLATFORM=arm64
 
 ENV RUN_USER                                        bitbucket
